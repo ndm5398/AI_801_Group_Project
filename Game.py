@@ -1,4 +1,4 @@
-import random, Deck, Card, Hand, Player
+import random, Deck, Card, Hand, Player, Rank
 
 def deal_to_player(player):
     player.hand.add_to_hand(in_deck.deal())
@@ -32,10 +32,13 @@ deal_flop()
 deal_turn()
 deal_river()
 
-print("in play")
+print("--------\nIn play\n--------")
 for card in in_play:
     print(card.print_card())
-print("player 1")
+print("--------\nPlayer 1\n--------")
 player_1.hand.show_hand()
-print("player 2")
+print("--------\nPlayer 2\n--------")
 player_2.hand.show_hand()
+
+in_play_rank = Rank.Rank(in_play)
+in_play_rank.print_rank()

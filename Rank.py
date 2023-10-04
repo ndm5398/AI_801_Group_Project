@@ -20,7 +20,7 @@ class Rank:
 
     def __init__(self, cards):
         self.card_list = cards
-        self.card_list.sort_cards()
+        self.sort_cards()
         for card in self.card_list:
             self.suit_count[card.suit] += 1
             self.value_count[str(card.value)] += 1
@@ -35,7 +35,6 @@ class Rank:
         self.straight_flush = self.is_straight_flush()
         self.royal_flush = self.is_royal_flush()
         self.rank_hand()
-        return
     
     def sort_cards(self):
         for x in range((len(self.card_list))):
@@ -43,10 +42,12 @@ class Rank:
                 if self.card_list[x].value > self.card_list[y].value:
                     swap = self.card_list[x]
                     self.card_list[x] = self.card_list[y]
-                    self.card_list[y] = swap 
+                    self.card_list[y] = swap
+
+    def print_rank(self):
+        print("Rank = {0}".format(self.rank))
 
     def high_card(self):
-        #self.card_list.sort_cards()
         self.high_card = self.card_list[-1].print_card()
         self.description = self.high_card
         self.rank = 1
@@ -79,7 +80,6 @@ class Rank:
         return False 
 
     def is_straight(self):
-        #self.card_list.sort_cards()
         for x in range(len(self.card_list)-1):
             if self.card_list[x].value + 1 != self.card_list[x+1].value:
                 return False
@@ -92,7 +92,7 @@ class Rank:
         return False
 
     def is_full_house(self):
-        return (self.is_pair() & self.is_three_of_a_kind())
+        return (self.is_one_pair() & self.is_three_of_a_kind())
 
     def is_four_of_a_kind(self):
         for key, value in self.value_count.items():
@@ -100,11 +100,10 @@ class Rank:
                 return True
         return False
             
-    def is_straight_flush(self, hand):
-        return (self.is_straight(hand) & self.is_flush())
+    def is_straight_flush(self):
+        return (self.is_straight() & self.is_flush())
 
     def is_royal_flush(self):
-        #self.card_list.sort_cards()
         if ((self.card_list[0].value == 10) & self.is_straight() & self.is_flush()):
             return True
         else:
