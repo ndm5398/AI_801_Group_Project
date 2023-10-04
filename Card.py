@@ -14,5 +14,5 @@ class Card:
             self.name = self.value
         
     
-    def print_card(self):
+    def get_card(self):
         return "{0} of {1}".format(self.name, self.suit)

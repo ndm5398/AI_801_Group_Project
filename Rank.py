@@ -2,21 +2,11 @@ import Card
 
 class Rank:
 
-    #card_list = []
     description = ""
     high_card = ""
     rank = 0
     suit_count = {"Diamonds":0, "Hearts":0, "Spades":0, "Clubs":0}
     value_count = {"2":0, "3":0, "4":0, "5":0, "6":0, "7":0, "8":0, "9":0, "10":0, "11":0, "12":0, "13":0, "14":0}
-    #pair = False
-    #two_pair = False
-    #three_of_a_kind = False
-    #straight = False
-    #flush = False
-    #full_house = False
-    #four_of_a_kind = False
-    #straight_flush = False
-    #royal_flush = False
 
     def __init__(self, cards):
         self.card_list = cards
@@ -44,11 +34,14 @@ class Rank:
                     self.card_list[x] = self.card_list[y]
                     self.card_list[y] = swap
 
+    def get_rank(self):
+        return self.rank
+    
     def print_rank(self):
         print("Rank = {0}".format(self.rank))
 
     def high_card(self):
-        self.high_card = self.card_list[-1].print_card()
+        self.high_card = self.card_list[-1].get_card()
         self.description = self.high_card
         self.rank = 1
         return 
