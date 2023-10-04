@@ -2,19 +2,17 @@ import Card
 
 class Rank:
 
-    description = ""
-    high_card = ""
-    rank = 0
-    suit_count = {"Diamonds":0, "Hearts":0, "Spades":0, "Clubs":0}
-    value_count = {"2":0, "3":0, "4":0, "5":0, "6":0, "7":0, "8":0, "9":0, "10":0, "11":0, "12":0, "13":0, "14":0}
-
     def __init__(self, cards):
+        self.description = ""
+        self.rank = 0
+        self.suit_count = {"Diamonds":0, "Hearts":0, "Spades":0, "Clubs":0}
+        self.value_count = {"2":0, "3":0, "4":0, "5":0, "6":0, "7":0, "8":0, "9":0, "10":0, "11":0, "12":0, "13":0, "14":0}
         self.card_list = cards
         self.sort_cards()
         for card in self.card_list:
             self.suit_count[card.suit] += 1
             self.value_count[str(card.value)] += 1
-        self.high_card()
+        self.high_card = self.card_list[-1]
         self.one_pair = self.is_one_pair()
         self.two_pair = self.is_two_pair()
         self.three_of_a_kind = self.is_three_of_a_kind()
@@ -40,12 +38,12 @@ class Rank:
     def print_rank(self):
         print("Rank = {0}".format(self.rank))
 
-    def high_card(self):
+    '''
+    def get_high_card(self):
         self.high_card = self.card_list[-1].get_card()
-        self.description = self.high_card
-        self.rank = 1
         return 
-
+    '''
+        
     def is_one_pair(self):
         count = 0
         for key, value in self.value_count.items():
