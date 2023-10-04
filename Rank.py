@@ -1,24 +1,27 @@
-import Card, Hand
+import Card
 
 class Rank:
 
+    #card_list = []
     description = ""
     high_card = ""
     rank = 0
     suit_count = {"Diamonds":0, "Hearts":0, "Spades":0, "Clubs":0}
     value_count = {"2":0, "3":0, "4":0, "5":0, "6":0, "7":0, "8":0, "9":0, "10":0, "11":0, "12":0, "13":0, "14":0}
-    pair = False
-    two_pair = False
-    three_of_a_kind = False
-    straight = False
-    flush = False
-    full_house = False
-    four_of_a_kind = False
-    straight_flush = False
-    royal_flush = False
+    #pair = False
+    #two_pair = False
+    #three_of_a_kind = False
+    #straight = False
+    #flush = False
+    #full_house = False
+    #four_of_a_kind = False
+    #straight_flush = False
+    #royal_flush = False
 
-    def __init__(self, hand):
-        for card in hand.in_hand:
+    def __init__(self, cards):
+        self.card_list = cards
+        self.card_list.sort_cards()
+        for card in self.card_list:
             self.suit_count[card.suit] += 1
             self.value_count[str(card.value)] += 1
         self.high_card()
@@ -33,10 +36,18 @@ class Rank:
         self.royal_flush = self.is_royal_flush()
         self.rank_hand()
         return
+    
+    def sort_cards(self):
+        for x in range((len(self.card_list))):
+            for y in range (x+1, (len(self.card_list)), 1):
+                if self.card_list[x].value > self.card_list[y].value:
+                    swap = self.card_list[x]
+                    self.card_list[x] = self.card_list[y]
+                    self.card_list[y] = swap 
 
-    def high_card(self, hand):
-        hand.sort_hand()
-        self.high_card = hand.in_hand[-1].print_card()
+    def high_card(self):
+        #self.card_list.sort_cards()
+        self.high_card = self.card_list[-1].print_card()
         self.description = self.high_card
         self.rank = 1
         return 
@@ -67,10 +78,10 @@ class Rank:
                 return True
         return False 
 
-    def is_straight(self, hand):
-        hand.sort_hand()
-        for x in range(len(hand.in_hand)-1):
-            if hand.in_hand[x].value + 1 != hand.in_hand[x+1].value:
+    def is_straight(self):
+        #self.card_list.sort_cards()
+        for x in range(len(self.card_list)-1):
+            if self.card_list[x].value + 1 != self.card_list[x+1].value:
                 return False
         return True
 
@@ -92,14 +103,14 @@ class Rank:
     def is_straight_flush(self, hand):
         return (self.is_straight(hand) & self.is_flush())
 
-    def is_royal_flush(self, hand):
-        hand.sort_hand()
-        if ((hand.in_hand[0].value == 10) & self.is_straight(hand) & self.is_flush()):
+    def is_royal_flush(self):
+        #self.card_list.sort_cards()
+        if ((self.card_list[0].value == 10) & self.is_straight() & self.is_flush()):
             return True
         else:
             return False
         
-    def rank_hand(self, hand):
+    def rank_hand(self):
         if self.royal_flush:
             self.rank = 10
             self.description = "Royal Flush"
