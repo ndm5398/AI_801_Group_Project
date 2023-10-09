@@ -62,8 +62,8 @@ if __name__ == '__main__':
         deal_turn()
         deal_river()
 
-        print("\nRound: {0}\n--------".format(round))
-        print("\nIn play")
+        print("\n\nRound: {0}\n--------".format(round))
+        print("In play")
         print(get_card_list(in_play))
         print("--------\nPlayer 1 Hole Cards")
         print(get_card_list(player_1.hand.in_hand))
