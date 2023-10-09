@@ -2,16 +2,17 @@ class Card:
     def __init__(self, value, suit):
         self.value = value
         self.suit = suit
-    
-    def print_card(self):
         if self.value == 11:
-            name = "Jack"
+            self.name = "Jack"
         elif self.value == 12:
-            name = "Queen"
+            self.name = "Queen"
         elif self.value == 13:
-            name = "King"
+            self.name = "King"
         elif self.value == 14:
-            name = "Ace"
+            self.name = "Ace"
         else:
-            name = self.value
-        return "{0} of {1}".format(name, self.suit)
+            self.name = self.value
+        
+    
+    def get_card(self):
+        return "{0} of {1}".format(self.name, self.suit)

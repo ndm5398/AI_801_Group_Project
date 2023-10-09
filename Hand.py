@@ -16,4 +16,4 @@ class Hand:
                 
     def show_hand(self):
         for c in self.in_hand:
-            print(c.print_card())
+            print(c.get_card())
