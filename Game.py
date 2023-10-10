@@ -52,33 +52,52 @@ if __name__ == '__main__':
         in_deck = Deck.Deck()
         in_play = []
         in_discard = []
+
+        print("\nRound: [{0}]".format(round))
+
+        # PREFLOP STAGE
+        print("---------------\nStage: Preflop")
         deal_to_player(player_1)
         deal_to_player(player_2)
         deal_to_player(player_1)
         deal_to_player(player_2)
+
+        # show player hole cards
+        print("Player 1 Hole Cards: {0}".format(get_card_list(player_1.hand.in_hand)))
+        print("Player 2 Hole Cards: {0}".format(get_card_list(player_2.hand.in_hand)))
+
+        # intial betting
         pot += player_1.bet(1)
         pot += player_2.bet(1)
-        deal_flop()
-        deal_turn()
-        deal_river()
 
-        print("\n\nRound: {0}\n--------".format(round))
-        print("In play")
-        print(get_card_list(in_play))
-        print("--------\nPlayer 1 Hole Cards")
-        print(get_card_list(player_1.hand.in_hand))
-        print("--------\nPlayer 2 Hole Cards")
-        print(get_card_list(player_2.hand.in_hand))
+        # FLOP STAGE
+        print("---------------\nStage: Flop")
+        deal_flop()
+        print("In play: {0}".format(get_card_list(in_play)))
+        # to-do additional betting
+
+        # TURN STAGE
+        print("---------------\nStage: Turn")
+        deal_turn()
+        print("In play: {0}".format(get_card_list(in_play)))
+        # to-do additional betting
+
+        # RIVER STAGE
+        print("---------------\nStage: River")
+        deal_river()
+        print("In play: {0}".format(get_card_list(in_play)))
+        # to-do final betting      
+        
 
         player_1_best_rank = rank_player_possible_hands(player_1, in_play)
-        print("--------\nPlayer 1 Rank: {0}\nBest Hand: {1}".format(player_1_best_rank.get_rank(), player_1_best_rank.description))
+        print("---------------\nPlayer 1 Rank: {0}\nBest Hand: {1}".format(player_1_best_rank.get_rank(), player_1_best_rank.description))
         #print("value_count: {0}".format(player_1_best_rank.value_count))
         #print("suit_count: {0}".format(player_1_best_rank.suit_count))
         print(get_card_list(player_1_best_rank.card_list))
 
         
         player_2_best_rank = rank_player_possible_hands(player_2, in_play)
-        print("--------\nPlayer 2 Rank: {0}\nBest Hand: {1}".format(player_2_best_rank.get_rank(), player_2_best_rank.description))
+        print("---------------\nPlayer 2 Rank: {0}\nBest Hand: {1}".format(player_2_best_rank.get_rank(), player_2_best_rank.description))
         #print("value_count: {0}".format(player_2_best_rank.value_count))
         #print("suit_count: {0}".format(player_2_best_rank.suit_count))
         print(get_card_list(player_2_best_rank.card_list))
@@ -106,8 +125,8 @@ if __name__ == '__main__':
                     player_2.stack += pot/2
                     print("\nDraw\n")
 
-        print("--------\nPlayer 1 Stack Size: {0}".format(player_1.stack))
-        print("--------\nPlayer 2 Stack Size: {0}".format(player_2.stack))
+        print("Player 1 Stack Size: {0}".format(player_1.stack))
+        print("Player 2 Stack Size: {0}\n\n".format(player_2.stack))
         player_1.clear_hand()
         player_2.clear_hand()
         round += 1
