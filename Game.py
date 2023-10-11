@@ -1,25 +1,37 @@
-import time, datetime, random, Deck, Card, Hand, Player
+import time
+import datetime
+import random
+import Deck
+import Card
+import Hand
+import Player
 from Rank import Rank
 from itertools import combinations
+
 
 def can_play(player):
     return not player.is_stack_empty()
 
+
 def deal_to_player(player):
     player.hand.add_to_hand(in_deck.deal())
+
 
 def deal_flop():
     in_discard.append(in_deck.deal())
     for x in range(3):
         in_play.append(in_deck.deal())
 
+
 def deal_turn():
     in_discard.append(in_deck.deal())
     in_play.append(in_deck.deal())
 
+
 def deal_river():
     in_discard.append(in_deck.deal())
     in_play.append(in_deck.deal())
+
 
 def rank_player_possible_hands(player, cards_in_play):
     potential_cards = cards_in_play + player.hand.in_hand
@@ -31,6 +43,7 @@ def rank_player_possible_hands(player, cards_in_play):
             best_rank = current_rank
     return best_rank
 
+
 def get_card_list(card_objects_list):
     card_list = []
     for card in card_objects_list:
@@ -40,7 +53,7 @@ def get_card_list(card_objects_list):
 
 if __name__ == '__main__':
 
-    #start timer for program execution
+    # start timer for program execution
     start_time = time.time()
 
     player_1 = Player.Player("player_1")
@@ -63,41 +76,80 @@ if __name__ == '__main__':
         deal_to_player(player_2)
 
         # show player hole cards
-        print("Player 1 Hole Cards: {0}".format(get_card_list(player_1.hand.in_hand)))
-        print("Player 2 Hole Cards: {0}".format(get_card_list(player_2.hand.in_hand)))
+        print("Player 1 Hole Cards: {0},   Stack Size: {1}".format(
+            get_card_list(player_1.hand.in_hand), player_1.stack))
+        print("Player 2 Hole Cards: {0},   Stack Size: {1}".format(
+            get_card_list(player_2.hand.in_hand), player_2.stack))
 
         # intial betting
-        pot += player_1.bet(1)
-        pot += player_2.bet(1)
+        bet = int(input("How much will you bet?"))
+        pot += player_1.bet(bet)
+        # player_2 is always calling for now until AI is implemented
+        print("Player 2 calls {0}".format(bet))
+        pot += player_2.bet(bet)
+        print("Total pot: {0}".format(pot))
 
         # FLOP STAGE
         print("---------------\nStage: Flop")
+        # show player hole cards
+        print("Player 1 Hole Cards: {0},   Stack Size: {1}".format(
+            get_card_list(player_1.hand.in_hand), player_1.stack))
+        print("Player 2 Hole Cards: {0},   Stack Size: {1}".format(
+            get_card_list(player_2.hand.in_hand), player_2.stack))
         deal_flop()
         print("In play: {0}".format(get_card_list(in_play)))
-        # to-do additional betting
+
+        bet = int(input("How much will you bet?"))
+        pot += player_1.bet(bet)
+        # player_2 is always calling for now until AI is implemented
+        print("Player 2 calls {0}".format(bet))
+        pot += player_2.bet(bet)
+        print("Total pot: {0}\n".format(pot))
 
         # TURN STAGE
         print("---------------\nStage: Turn")
+        # show player hole cards
+        print("Player 1 Hole Cards: {0},   Stack Size: {1}".format(
+            get_card_list(player_1.hand.in_hand), player_1.stack))
+        print("Player 2 Hole Cards: {0},   Stack Size: {1}".format(
+            get_card_list(player_2.hand.in_hand), player_2.stack))
         deal_turn()
         print("In play: {0}".format(get_card_list(in_play)))
-        # to-do additional betting
+
+        bet = int(input("How much will you bet?"))
+        pot += player_1.bet(bet)
+        # player_2 is always calling for now until AI is implemented
+        print("Player 2 calls {0}".format(bet))
+        pot += player_2.bet(bet)
+        print("Total pot: {0}\n".format(pot))
 
         # RIVER STAGE
         print("---------------\nStage: River")
+        # show player hole cards
+        print("Player 1 Hole Cards: {0},   Stack Size: {1}".format(
+            get_card_list(player_1.hand.in_hand), player_1.stack))
+        print("Player 2 Hole Cards: {0},   Stack Size: {1}".format(
+            get_card_list(player_2.hand.in_hand), player_2.stack))
         deal_river()
         print("In play: {0}".format(get_card_list(in_play)))
-        # to-do final betting      
-        
+
+        bet = int(input("How much will you bet?"))
+        pot += player_1.bet(bet)
+        # player_2 is always calling for now until AI is implemented
+        print("Player 2 calls {0}".format(bet))
+        pot += player_2.bet(bet)
+        print("Total pot: {0}\n".format(pot))
 
         player_1_best_rank = rank_player_possible_hands(player_1, in_play)
-        print("---------------\nPlayer 1 Rank: {0}\nBest Hand: {1}".format(player_1_best_rank.get_rank(), player_1_best_rank.description))
+        print("---------------\nPlayer 1 Rank: {0}\nBest Hand: {1}".format(
+            player_1_best_rank.get_rank(), player_1_best_rank.description))
         #print("value_count: {0}".format(player_1_best_rank.value_count))
         #print("suit_count: {0}".format(player_1_best_rank.suit_count))
         print(get_card_list(player_1_best_rank.card_list))
 
-        
         player_2_best_rank = rank_player_possible_hands(player_2, in_play)
-        print("---------------\nPlayer 2 Rank: {0}\nBest Hand: {1}".format(player_2_best_rank.get_rank(), player_2_best_rank.description))
+        print("---------------\nPlayer 2 Rank: {0}\nBest Hand: {1}".format(
+            player_2_best_rank.get_rank(), player_2_best_rank.description))
         #print("value_count: {0}".format(player_2_best_rank.value_count))
         #print("suit_count: {0}".format(player_2_best_rank.suit_count))
         print(get_card_list(player_2_best_rank.card_list))
@@ -131,6 +183,6 @@ if __name__ == '__main__':
         player_2.clear_hand()
         round += 1
 
-
-    #end timer
-    print("--- Execution Time: {0} ---".format(datetime.timedelta(seconds=(time.time() - start_time))))
+    # end timer
+    print("--- Execution Time: {0} ---".format(
+        datetime.timedelta(seconds=(time.time() - start_time))))
