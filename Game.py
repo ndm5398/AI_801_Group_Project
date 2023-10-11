@@ -56,10 +56,10 @@ if __name__ == '__main__':
     # start timer for program execution
     start_time = time.time()
 
-    player_1 = Player.Player("player_1")
+    player_1 = Player.Player("player")
     player_1.swap_button()
     button = 1
-    player_2 = Player.Player("player_2")
+    player_2 = Player.Player("AI")
     round = 0
 
     while (can_play(player_1) & can_play(player_2)):
@@ -82,80 +82,80 @@ if __name__ == '__main__':
         deal_to_player(p2)
 
         # show player hole cards
-        print("Player {2} Hole Cards: {0},   Stack Size: {1}".format(
-            get_card_list(p1.hand.in_hand), p1.stack, button))
-        print("Player {2} Hole Cards: {0},   Stack Size: {1}".format(
-            get_card_list(p2.hand.in_hand), p2.stack, 1 if button == 2 else 2))
+        print("{2} \t({1})\tHole Cards: \t{0}".format(
+            get_card_list(p1.hand.in_hand), p1.stack, p1.name))
+        print("{2} \t({1})\tHole Cards: \t{0}".format(
+            get_card_list(p2.hand.in_hand), p2.stack, p2.name))
 
         # intial betting
         bet = int(input("How much will you bet?"))
         pot += p1.bet(bet)
         # p2 is always calling for now until AI is implemented
-        print("Player 2 calls {0}".format(bet))
+        print("AI calls {0}".format(bet))
         pot += p2.bet(bet)
         print("Total pot: {0}".format(pot))
 
         # FLOP STAGE
         print("---------------\nStage: Flop")
         # show player hole cards
-        print("Player {2} Hole Cards: {0},   Stack Size: {1}".format(
-            get_card_list(p1.hand.in_hand), p1.stack, button))
-        print("Player {2} Hole Cards: {0},   Stack Size: {1}".format(
-            get_card_list(p2.hand.in_hand), p2.stack, 1 if button == 2 else 2))
+        print("{2} \t({1})\tHole Cards: \t{0}".format(
+            get_card_list(p1.hand.in_hand), p1.stack, p1.name))
+        print("{2} \t({1})\tHole Cards: \t{0}".format(
+            get_card_list(p2.hand.in_hand), p2.stack, p2.name))
         deal_flop()
         print("In play: {0}".format(get_card_list(in_play)))
 
         bet = int(input("How much will you bet?"))
         pot += p1.bet(bet)
         # p2 is always calling for now until AI is implemented
-        print("Player 2 calls {0}".format(bet))
+        print("AI calls {0}".format(bet))
         pot += p2.bet(bet)
         print("Total pot: {0}\n".format(pot))
 
         # TURN STAGE
         print("---------------\nStage: Turn")
         # show player hole cards
-        print("Player {2} Hole Cards: {0},   Stack Size: {1}".format(
-            get_card_list(p1.hand.in_hand), p1.stack, button))
-        print("Player {2} Hole Cards: {0},   Stack Size: {1}".format(
-            get_card_list(p2.hand.in_hand), p2.stack, 1 if button == 2 else 2))
+        print("{2} \t({1})\tHole Cards: \t{0}".format(
+            get_card_list(p1.hand.in_hand), p1.stack, p1.name))
+        print("{2} \t({1})\tHole Cards: \t{0}".format(
+            get_card_list(p2.hand.in_hand), p2.stack, p2.name))
         deal_turn()
         print("In play: {0}".format(get_card_list(in_play)))
 
         bet = int(input("How much will you bet?"))
         pot += p1.bet(bet)
         # p2 is always calling for now until AI is implemented
-        print("Player 2 calls {0}".format(bet))
+        print("AI calls {0}".format(bet))
         pot += p2.bet(bet)
         print("Total pot: {0}\n".format(pot))
 
         # RIVER STAGE
         print("---------------\nStage: River")
         # show player hole cards
-        print("Player {2} Hole Cards: {0},   Stack Size: {1}".format(
-            get_card_list(p1.hand.in_hand), p1.stack, button))
-        print("Player {2} Hole Cards: {0},   Stack Size: {1}".format(
-            get_card_list(p2.hand.in_hand), p2.stack, 1 if button == 2 else 2))
+        print("{2} \t({1})\tHole Cards: \t{0}".format(
+            get_card_list(p1.hand.in_hand), p1.stack, p1.name))
+        print("{2} \t({1})\tHole Cards: \t{0}".format(
+            get_card_list(p2.hand.in_hand), p2.stack, p2.name))
         deal_river()
         print("In play: {0}".format(get_card_list(in_play)))
 
         bet = int(input("How much will you bet?"))
         pot += p1.bet(bet)
         # p2 is always calling for now until AI is implemented
-        print("Player 2 calls {0}".format(bet))
+        print("AI calls {0}".format(bet))
         pot += p2.bet(bet)
         print("Total pot: {0}\n".format(pot))
 
         p1_best_rank = rank_player_possible_hands(p1, in_play)
-        print("---------------\nPlayer 1 Rank: {0}\nBest Hand: {1}".format(
-            p1_best_rank.get_rank(), p1_best_rank.description))
+        print("---------------\n{2} Rank: {0}\nBest Hand: {1}".format(
+            p1_best_rank.get_rank(), p1_best_rank.description, p1.name))
         #print("value_count: {0}".format(p1_best_rank.value_count))
         #print("suit_count: {0}".format(p1_best_rank.suit_count))
         print(get_card_list(p1_best_rank.card_list))
 
         p2_best_rank = rank_player_possible_hands(p2, in_play)
-        print("---------------\nPlayer 2 Rank: {0}\nBest Hand: {1}".format(
-            p2_best_rank.get_rank(), p2_best_rank.description))
+        print("---------------\n{2} Rank: {0}\nBest Hand: {1}".format(
+            p2_best_rank.get_rank(), p2_best_rank.description, p2.name))
         #print("value_count: {0}".format(p2_best_rank.value_count))
         #print("suit_count: {0}".format(p2_best_rank.suit_count))
         print(get_card_list(p2_best_rank.card_list))
@@ -167,24 +167,24 @@ if __name__ == '__main__':
         else:
             if p1_best_rank.rank > p2_best_rank.rank:
                 p1.stack += pot
-                print("\nPlayer 1 Wins\n")
+                print("\n{0} Wins\n".format(p1.name))
             elif p2_best_rank.rank > p1_best_rank.rank:
                 p2.stack += pot
-                print("\nPlayer 2 Wins\n")
+                print("\n{0} Wins\n".format(p2.name))
             else:
                 if p1_best_rank.high_card.value > p2_best_rank.high_card.value:
                     p1.stack += pot
-                    print("\nPlayer 1 Wins\n")
+                    print("\n{0} Wins\n".format(p1.name))
                 elif p2_best_rank.high_card.value > p1_best_rank.high_card.value:
                     p2.stack += pot
-                    print("\nPlayer 2 Wins\n")
+                    print("\n{0} Wins\n".format(p2.name))
                 else:
                     p1.stack += pot/2
                     p2.stack += pot/2
                     print("\nDraw\n")
 
-        print("Player 1 Stack Size: {0}".format(p1.stack))
-        print("Player 2 Stack Size: {0}\n\n".format(p2.stack))
+        print("{1} Stack Size: {0}".format(p1.stack, p1.name))
+        print("{1} Stack Size: {0}\n\n".format(p2.stack, p2.name))
         p1.clear_hand()
         p2.clear_hand()
         p1.swap_button()
