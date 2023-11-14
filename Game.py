@@ -41,6 +41,12 @@ def rank_player_possible_hands(player, cards_in_play):
         current_rank = Rank(list(entry))
         if current_rank.rank > best_rank.rank:
             best_rank = current_rank
+        elif current_rank.rank == best_rank.rank:
+            # ------------------------------------------------------------------
+            # TO-DO
+            # further testing needed
+            # dive into second rank value or high card based on hand description 
+            # ------------------------------------------------------------------
     return best_rank
 
 
