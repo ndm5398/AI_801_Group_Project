@@ -57,7 +57,7 @@ class Rank:
                 count += 1
                 temp.append(int(key))
         if count == 2:
-            temp = temp.sort
+            temp.sort()
             self.two_pair["low"] = temp[0]
             self.two_pair["high"] = temp[1]
 
@@ -80,7 +80,7 @@ class Rank:
                 self.flush["suit"] = key
 
     def is_full_house(self):
-        if (self.one_pair & self.three_of_a_kind):
+        if (self.one_pair and self.three_of_a_kind):
             self.full_house["one_pair_value"] = self.one_pair["value"]
             self.full_house["three_of_a_kind_value"] = self.three_of_a_kind["value"]
 
@@ -90,12 +90,12 @@ class Rank:
                 self.four_of_a_kind["value"] = key
             
     def is_straight_flush(self):
-        if (self.straight & self.flush):
+        if (self.straight and self.flush):
             self.straight_flush["straight_high"] = self.straight["high"]
             self.straight_flush["flush_suit"] = self.flush["suit"]
 
     def is_royal_flush(self):
-        if ((self.card_list[0].value == 10) & self.straight & self.flush):
+        if ((self.card_list[0].value == 10) and self.straight and self.flush):
             self.royal_flush["straight_high"] = self.straight["high"]
             self.royal_flush["flush_suit"] = self.flush["suit"]
         
