@@ -34,6 +34,7 @@ def deal_river():
 
 
 def rank_player_possible_hands(player, cards_in_play):
+    #def compare_high_card()
     potential_cards = cards_in_play + player.hand.in_hand
     possible_combinations = list(combinations(potential_cards, 5))
     best_rank = Rank(list(possible_combinations[0]))
@@ -41,6 +42,68 @@ def rank_player_possible_hands(player, cards_in_play):
         current_rank = Rank(list(entry))
         if current_rank.rank > best_rank.rank:
             best_rank = current_rank
+        elif current_rank.rank == best_rank.rank:
+            if current_rank.rank == 1: # high card
+                if current_rank.high_card.value > best_rank.high_card.value:
+                    best_rank = current_rank
+            elif current_rank.rank == 2: # one pair
+                if current_rank.one_pair["value"] > best_rank.one_pair["value"]:
+                    best_rank = current_rank
+                elif current_rank.one_pair["value"] == best_rank.one_pair["value"]:
+                    if current_rank.high_card.value > best_rank.high_card.value:
+                        best_rank = current_rank
+            elif current_rank.rank == 3: # two pair
+                if current_rank.two_pair["high"] > best_rank.two_pair["high"]:
+                    best_rank = current_rank
+                elif current_rank.two_pair["high"] == best_rank.two_pair["high"]:
+                    if current_rank.two_pair["low"] > best_rank.two_pair["low"]:
+                        best_rank = current_rank
+                    elif current_rank.two_pair["low"] == best_rank.two_pair["low"]:
+                        if current_rank.high_card.value > best_rank.high_card.value:
+                            best_rank = current_rank
+            elif current_rank.rank == 4: # three of a kind
+                if current_rank.three_of_a_kind["value"] > best_rank.three_of_a_kind["value"]:
+                    best_rank = current_rank
+                elif current_rank.three_of_a_kind["value"] == best_rank.three_of_a_kind["value"]:
+                    if current_rank.high_card.value > best_rank.high_card.value:
+                        best_rank = current_rank
+            elif current_rank.rank == 5: # straight
+                if current_rank.straight["high"] > best_rank.straight["high"]:
+                    best_rank = current_rank
+                elif current_rank.straight["high"] == best_rank.straight["high"]:
+                    if current_rank.high_card.value > best_rank.high_card.value:
+                        best_rank = current_rank
+            elif current_rank.rank == 6: # flush
+                if current_rank.card_list[-1] > best_rank.card_list[-1]:
+                    best_rank = current_rank
+                elif current_rank.card_list[-1] == best_rank.card_list[-1]:
+                    if current_rank.card_list[-2] > best_rank.card_list[-2]:
+                        best_rank = current_rank
+                    elif current_rank.card_list[-2] == best_rank.card_list[-2]:
+                        if current_rank.card_list[-3] > best_rank.card_list[-3]:
+                            best_rank = current_rank
+                        elif current_rank.card_list[-3] == best_rank.card_list[-3]:
+                            if current_rank.card_list[-4] > best_rank.card_list[-4]:
+                                best_rank = current_rank
+                            elif current_rank.card_list[-4] == best_rank.card_list[-4]:
+                                if current_rank.card_list[-5] > best_rank.card_list[-5]:
+                                    best_rank = current_rank
+            elif current_rank.rank == 7: # full house
+                if current_rank.full_house["three_of_a_kind_value"] > best_rank.full_house["three_of_a_kind_value"]:
+                    best_rank = current_rank
+                elif current_rank.full_house["three_of_a_kind_value"] == best_rank.full_house["three_of_a_kind_value"]:
+                    if current_rank.full_house["one_pair_value"] > best_rank.full_house["one_pair_value"]:
+                        best_rank = current_rank
+            elif current_rank.rank == 8: # four of a kind
+                if current_rank.four_of_a_kind["value"] > best_rank.four_of_a_kind["value"]:
+                    best_rank = current_rank
+                elif current_rank.four_of_a_kind["value"] == best_rank.four_of_a_kind["value"]:
+                    if current_rank.high_card.value > best_rank.high_card.value:
+                        best_rank = current_rank
+            elif current_rank.rank == 9: # straight flush
+                if current_rank.straight_flush["high"] > best_rank.straight_flush["high"]:
+                    best_rank = current_rank
+            # no royal flush tie possible
     return best_rank
 
 
