@@ -1,10 +1,10 @@
-import Player
+from Player import Player
 
 
 class Agent(Player):
 
-    def __init__():
-        super()
+    def __init__(self, name):
+        Player.__init__(self, name)
 
     def determine_action(self, opponent, action, bet, pot, in_play):
         if action == "CHECK":

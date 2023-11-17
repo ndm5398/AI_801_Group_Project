@@ -29,11 +29,13 @@ class Player():
 
     def bet(self, value):
         if self.is_stack_empty():
-            print("ERROR: {0} stack is empty".format(self.name))
+            print("Can not bet anymore, you are all in")
         else:
             if (self.stack - value) < 0:
-                print("ERROR: {0} Not enough chips to bet {1}".format(
+                print("Not enough chips to bet {1}, you are all in".format(
                     self.name, value))
+                self.stack = 0
+                return self.stack
             else:
                 self.stack -= value
                 return value

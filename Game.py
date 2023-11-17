@@ -5,6 +5,7 @@ import Deck
 import Card
 import Hand
 import Player
+from Agent import Agent
 from Rank import Rank
 from itertools import combinations
 
@@ -51,12 +52,57 @@ def get_card_list(card_objects_list):
     return card_list
 
 
+def perform_stage(first, second, pot, cards):
+    time.sleep(1)
+    if (first.name == "player"):
+        not_complete = True
+        previous_action = "CALL"
+        while not_complete:
+            bet = player_response(first)
+            previous_action = determine_action(bet, previous_action)
+            handle_action(first, previous_action, bet)
+            # Have the AI determine what action it should take
+            bet = ai_response(first, second, previous_action, bet, pot, cards)
+            previous_action = determine_action(bet)
+            handle_action(second, previous_action, bet)
+
+    else:
+        # For now the AI agent will just check if going first
+        print("{0} checks.".format(first.name))
+        time.sleep(1)
+        bet = int(input("How much will you bet? [-1 to fold]"))
+
+
+def player_response(player, pot):
+    return int(input("How much will you bet? [-1 to fold]"))
+
+def ai_response(ai, player, action, bet, pot, cards):
+    ai_action = ai.determine_action(player, action, bet, pot, cards)
+    if ai_action == "FOLD":
+        return -1
+    elif ai_action == "CHECK":
+        return 0
+    else:
+        return bet
+    
+def determine_action(bet, previous_action):
+    if bet == 0:
+        return "CHECK"
+    elif bet == -1:
+        return "FOLD"
+    else:
+        if previous_action == "CALL":
+            return "RAISE"
+    
+def handle_action(player, action, bet):
+    pass
+
 if __name__ == '__main__':
 
     # start timer for program execution
     start_time = time.time()
 
-    player_1 = Player.Player("player")
+    player_1 = Agent("player")
     player_1.swap_button()
     button = 1
     player_2 = Player.Player("AI")
@@ -87,10 +133,12 @@ if __name__ == '__main__':
         print("{2} \t({1})\tHole Cards: \t{0}".format(
             get_card_list(p2.hand.in_hand), p2.stack, p2.name))
 
+        pot = perform_stage(p1, p2, pot, in_play)
         # intial betting
         bet = int(input("How much will you bet?"))
         pot += p1.bet(bet)
         # p2 is always calling for now until AI is implemented
+        time.sleep(1)
         print("AI calls {0}".format(bet))
         pot += p2.bet(bet)
         print("Total pot: {0}".format(pot))
@@ -108,6 +156,7 @@ if __name__ == '__main__':
         bet = int(input("How much will you bet?"))
         pot += p1.bet(bet)
         # p2 is always calling for now until AI is implemented
+        time.sleep(1)
         print("AI calls {0}".format(bet))
         pot += p2.bet(bet)
         print("Total pot: {0}\n".format(pot))
@@ -125,6 +174,7 @@ if __name__ == '__main__':
         bet = int(input("How much will you bet?"))
         pot += p1.bet(bet)
         # p2 is always calling for now until AI is implemented
+        time.sleep(1)
         print("AI calls {0}".format(bet))
         pot += p2.bet(bet)
         print("Total pot: {0}\n".format(pot))
