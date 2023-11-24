@@ -151,11 +151,20 @@ if __name__ == '__main__':
             get_card_list(p2.hand.in_hand), p2.stack, p2.name))
 
         # intial betting
-        bet = int(input("How much will you bet?"))
-        pot += p1.bet(bet)
-        # p2 is always calling for now until AI is implemented
-        print("AI calls {0}".format(bet))
-        pot += p2.bet(bet)
+        # betting loop
+        p1_bet, p2_bet = -1, -1
+        while p1_bet < 0:
+            bet = int(input("How much will you bet?"))
+            if p1.can_bet(bet):
+                p1_bet = bet
+                pot += p1.bet(p1_bet)
+        while p2_bet < 0:
+            #bet = int(input("How much will you bet?"))
+            bet = p1_bet # p2 is always calling for now until AI is implemented
+            if p2.can_bet(bet):
+                p2_bet = bet
+                pot += p2.bet(p2_bet)
+                print("AI calls {0}".format(bet))
         print("Total pot: {0}".format(pot))
 
         # FLOP STAGE
@@ -168,12 +177,21 @@ if __name__ == '__main__':
         deal_flop()
         print("In play: {0}".format(get_card_list(in_play)))
 
-        bet = int(input("How much will you bet?"))
-        pot += p1.bet(bet)
-        # p2 is always calling for now until AI is implemented
-        print("AI calls {0}".format(bet))
-        pot += p2.bet(bet)
-        print("Total pot: {0}\n".format(pot))
+        # betting loop
+        p1_bet, p2_bet = -1, -1
+        while p1_bet < 0:
+            bet = int(input("How much will you bet?"))
+            if p1.can_bet(bet):
+                p1_bet = bet
+                pot += p1.bet(p1_bet)
+        while p2_bet < 0:
+            #bet = int(input("How much will you bet?"))
+            bet = p1_bet # p2 is always calling for now until AI is implemented
+            if p2.can_bet(bet):
+                p2_bet = bet
+                pot += p2.bet(p2_bet)
+                print("AI calls {0}".format(bet))
+        print("Total pot: {0}".format(pot))
 
         # TURN STAGE
         print("---------------\nStage: Turn")
@@ -185,12 +203,21 @@ if __name__ == '__main__':
         deal_turn()
         print("In play: {0}".format(get_card_list(in_play)))
 
-        bet = int(input("How much will you bet?"))
-        pot += p1.bet(bet)
-        # p2 is always calling for now until AI is implemented
-        print("AI calls {0}".format(bet))
-        pot += p2.bet(bet)
-        print("Total pot: {0}\n".format(pot))
+        # betting loop
+        p1_bet, p2_bet = -1, -1
+        while p1_bet < 0:
+            bet = int(input("How much will you bet?"))
+            if p1.can_bet(bet):
+                p1_bet = bet
+                pot += p1.bet(p1_bet)
+        while p2_bet < 0:
+            #bet = int(input("How much will you bet?"))
+            bet = p1_bet # p2 is always calling for now until AI is implemented
+            if p2.can_bet(bet):
+                p2_bet = bet
+                pot += p2.bet(p2_bet)
+                print("AI calls {0}".format(bet))
+        print("Total pot: {0}".format(pot))
 
         # RIVER STAGE
         print("---------------\nStage: River")
@@ -202,12 +229,21 @@ if __name__ == '__main__':
         deal_river()
         print("In play: {0}".format(get_card_list(in_play)))
 
-        bet = int(input("How much will you bet?"))
-        pot += p1.bet(bet)
-        # p2 is always calling for now until AI is implemented
-        print("AI calls {0}".format(bet))
-        pot += p2.bet(bet)
-        print("Total pot: {0}\n".format(pot))
+        # betting loop
+        p1_bet, p2_bet = -1, -1
+        while p1_bet < 0:
+            bet = int(input("How much will you bet?"))
+            if p1.can_bet(bet):
+                p1_bet = bet
+                pot += p1.bet(p1_bet)
+        while p2_bet < 0:
+            #bet = int(input("How much will you bet?"))
+            bet = p1_bet # p2 is always calling for now until AI is implemented
+            if p2.can_bet(bet):
+                p2_bet = bet
+                pot += p2.bet(p2_bet)
+                print("AI calls {0}".format(bet))
+        print("Total pot: {0}".format(pot))
 
         p1_best_rank = rank_player_possible_hands(p1, in_play)
         print("---------------\n{2} Rank: {0}\nBest Hand: {1}".format(
