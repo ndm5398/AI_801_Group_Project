@@ -72,7 +72,7 @@ class Rank:
             if self.card_list[x].value + 1 != self.card_list[x+1].value:
                 test = False
         if test:
-            self.straight["high"] = self.card_list[len(self.card_list)-1]
+            self.straight["high"] = self.card_list[-1]
 
     def is_flush(self):
         for key, value in self.suit_count.items():

@@ -34,7 +34,6 @@ def deal_river():
 
 
 def rank_player_possible_hands(player, cards_in_play):
-    #def compare_high_card()
     potential_cards = cards_in_play + player.hand.in_hand
     possible_combinations = list(combinations(potential_cards, 5))
     best_rank = Rank(list(possible_combinations[0]))
@@ -106,6 +105,60 @@ def rank_player_possible_hands(player, cards_in_play):
             # no royal flush tie possible
     return best_rank
 
+def compare(p1_value, p2_value):
+    if p1_value > p2_value:
+        return "p1"
+    elif p2_value > p1_value:
+        return "p2"
+    else:
+        return "tie"
+
+# somewhat duplicate from hand ranking code, will optimize in the future
+def compare_player_hands(p1_best_rank, p2_best_rank):
+    winner = ""
+    if p1_best_rank.rank == 1: # high card
+        winner = compare(p1_best_rank.high_card.value, p2_best_rank.high_card.value)
+    elif p1_best_rank.rank == 2: # one pair
+        winner = compare(p1_best_rank.one_pair["value"], p2_best_rank.one_pair["value"])
+        if winner == "tie":
+            winner = compare(p1_best_rank.high_card.value, p2_best_rank.high_card.value)
+    elif p1_best_rank.rank == 3: # two pair
+        winner = compare(p1_best_rank.two_pair["high"], p2_best_rank.two_pair["high"])
+        if winner == "tie":
+            winner = compare(p1_best_rank.two_pair["low"], p2_best_rank.two_pair["low"])
+            if winner == "tie":
+                winner = compare(p1_best_rank.high_card.value, p2_best_rank.high_card.value)
+    elif p1_best_rank.rank == 4: # three of a kind
+        winner = compare(p1_best_rank.three_of_a_kind["value"], p2_best_rank.three_of_a_kind["value"])
+        if winner == "tie":
+            winner = compare(p1_best_rank.high_card.value, p2_best_rank.high_card.value)
+    elif p1_best_rank.rank == 5: # straight
+        winner = compare(p1_best_rank.straight["high"], p2_best_rank.straight["high"])
+        if winner == "tie":
+            winner = compare(p1_best_rank.high_card.value, p2_best_rank.high_card.value)
+    elif p1_best_rank.rank == 6: # flush
+        winner = compare(p1_best_rank.card_list[-1], p2_best_rank.card_list[-1])
+        if winner == "tie":
+            winner = compare(p1_best_rank.card_list[-2], p2_best_rank.card_list[-2])
+            if winner == "tie":
+                winner = compare(p1_best_rank.card_list[-3], p2_best_rank.card_list[-3])
+                if winner == "tie":
+                    winner = compare(p1_best_rank.card_list[-4], p2_best_rank.card_list[-4])
+                    if winner == "tie":
+                        winner = compare(p1_best_rank.card_list[-5], p2_best_rank.card_list[-5])
+    elif p1_best_rank.rank == 7: # full house
+        winner = compare(p1_best_rank.full_house["three_of_a_kind_value"], p2_best_rank.full_house["three_of_a_kind_value"])
+        if winner == "tie":
+            winner = compare(p1_best_rank.full_house["one_pair_value"], p2_best_rank.full_house["one_pair_value"])
+    elif p1_best_rank.rank == 8: # four of a kind
+        winner = compare(p1_best_rank.four_of_a_kind["value"], p2_best_rank.four_of_a_kind["value"])
+        if winner == "tie":
+            winner = compare(p1_best_rank.high_card.value, p2_best_rank.high_card.value)
+    elif p1_best_rank.rank == 9: # straight flush
+        winner = compare(p1_best_rank.straight_flush["high"], p2_best_rank.straight_flush["high"])
+    # no royal flush tie possible
+    return winner
+
 
 def get_card_list(card_objects_list):
     card_list = []
@@ -151,11 +204,28 @@ if __name__ == '__main__':
             get_card_list(p2.hand.in_hand), p2.stack, p2.name))
 
         # intial betting
-        bet = int(input("How much will you bet?"))
-        pot += p1.bet(bet)
-        # p2 is always calling for now until AI is implemented
-        print("AI calls {0}".format(bet))
-        pot += p2.bet(bet)
+        # betting loop
+        p1_bet, p2_bet = -1, -1
+        while p1_bet < 0:
+            bet = input("How much will you bet?")
+            if bet == '':
+                bet = 0
+            else:
+                bet = int(bet)
+            if p1.can_bet(bet):
+                p1_bet = bet
+                pot += p1.bet(p1_bet)
+        while p2_bet < 0:
+            #bet = input("How much will you bet?")
+            #if bet == '':
+            #    bet = 0
+            #else:
+            #    bet = int(bet)
+            bet = p1_bet # p2 is always calling for now until AI is implemented
+            if p2.can_bet(bet):
+                p2_bet = bet
+                pot += p2.bet(p2_bet)
+                print("AI calls {0}".format(bet))
         print("Total pot: {0}".format(pot))
 
         # FLOP STAGE
@@ -168,12 +238,29 @@ if __name__ == '__main__':
         deal_flop()
         print("In play: {0}".format(get_card_list(in_play)))
 
-        bet = int(input("How much will you bet?"))
-        pot += p1.bet(bet)
-        # p2 is always calling for now until AI is implemented
-        print("AI calls {0}".format(bet))
-        pot += p2.bet(bet)
-        print("Total pot: {0}\n".format(pot))
+        # betting loop
+        p1_bet, p2_bet = -1, -1
+        while p1_bet < 0:
+            bet = input("How much will you bet?")
+            if bet == '':
+                bet = 0
+            else:
+                bet = int(bet)
+            if p1.can_bet(bet):
+                p1_bet = bet
+                pot += p1.bet(p1_bet)
+        while p2_bet < 0:
+            #bet = input("How much will you bet?")
+            #if bet == '':
+            #    bet = 0
+            #else:
+            #    bet = int(bet)
+            bet = p1_bet # p2 is always calling for now until AI is implemented
+            if p2.can_bet(bet):
+                p2_bet = bet
+                pot += p2.bet(p2_bet)
+                print("AI calls {0}".format(bet))
+        print("Total pot: {0}".format(pot))
 
         # TURN STAGE
         print("---------------\nStage: Turn")
@@ -185,12 +272,29 @@ if __name__ == '__main__':
         deal_turn()
         print("In play: {0}".format(get_card_list(in_play)))
 
-        bet = int(input("How much will you bet?"))
-        pot += p1.bet(bet)
-        # p2 is always calling for now until AI is implemented
-        print("AI calls {0}".format(bet))
-        pot += p2.bet(bet)
-        print("Total pot: {0}\n".format(pot))
+        # betting loop
+        p1_bet, p2_bet = -1, -1
+        while p1_bet < 0:
+            bet = input("How much will you bet?")
+            if bet == '':
+                bet = 0
+            else:
+                bet = int(bet)
+            if p1.can_bet(bet):
+                p1_bet = bet
+                pot += p1.bet(p1_bet)
+        while p2_bet < 0:
+            #bet = input("How much will you bet?")
+            #if bet == '':
+            #    bet = 0
+            #else:
+            #    bet = int(bet)
+            bet = p1_bet # p2 is always calling for now until AI is implemented
+            if p2.can_bet(bet):
+                p2_bet = bet
+                pot += p2.bet(p2_bet)
+                print("AI calls {0}".format(bet))
+        print("Total pot: {0}".format(pot))
 
         # RIVER STAGE
         print("---------------\nStage: River")
@@ -202,12 +306,29 @@ if __name__ == '__main__':
         deal_river()
         print("In play: {0}".format(get_card_list(in_play)))
 
-        bet = int(input("How much will you bet?"))
-        pot += p1.bet(bet)
-        # p2 is always calling for now until AI is implemented
-        print("AI calls {0}".format(bet))
-        pot += p2.bet(bet)
-        print("Total pot: {0}\n".format(pot))
+        # betting loop
+        p1_bet, p2_bet = -1, -1
+        while p1_bet < 0:
+            bet = input("How much will you bet?")
+            if bet == '':
+                bet = 0
+            else:
+                bet = int(bet)
+            if p1.can_bet(bet):
+                p1_bet = bet
+                pot += p1.bet(p1_bet)
+        while p2_bet < 0:
+            #bet = input("How much will you bet?")
+            #if bet == '':
+            #    bet = 0
+            #else:
+            #    bet = int(bet)
+            bet = p1_bet # p2 is always calling for now until AI is implemented
+            if p2.can_bet(bet):
+                p2_bet = bet
+                pot += p2.bet(p2_bet)
+                print("AI calls {0}".format(bet))
+        print("Total pot: {0}".format(pot))
 
         p1_best_rank = rank_player_possible_hands(p1, in_play)
         print("---------------\n{2} Rank: {0}\nBest Hand: {1}".format(
@@ -235,10 +356,11 @@ if __name__ == '__main__':
                 p2.stack += pot
                 print("\n{0} Wins\n".format(p2.name))
             else:
-                if p1_best_rank.high_card.value > p2_best_rank.high_card.value:
+                winner = compare_player_hands(p1_best_rank, p2_best_rank)
+                if winner == "p1":
                     p1.stack += pot
                     print("\n{0} Wins\n".format(p1.name))
-                elif p2_best_rank.high_card.value > p1_best_rank.high_card.value:
+                elif winner == "p2":
                     p2.stack += pot
                     print("\n{0} Wins\n".format(p2.name))
                 else:
@@ -254,6 +376,11 @@ if __name__ == '__main__':
         p2.swap_button()
         button = 1 if button == 2 else 2
         round += 1
+    
+    if p1.stack > p2.stack:
+        print("---------------\nPlayer 1 wins!\n---------------")
+    else:
+        print("---------------\nPlayer 2 wins!\n---------------")
 
     # end timer
     print("--- Execution Time: {0} ---".format(
