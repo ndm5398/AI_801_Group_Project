@@ -118,7 +118,7 @@ def compare_player_hands(p1_best_rank, p2_best_rank):
     winner = ""
     if p1_best_rank.rank == 1: # high card
         winner = compare(p1_best_rank.high_card, p2_best_rank.high_card)
-    elif p1_best_rank.rank.rank == 2: # one pair
+    elif p1_best_rank.rank == 2: # one pair
         winner = compare(p1_best_rank.one_pair["value"], p2_best_rank.one_pair["value"])
         if winner == "tie":
             winner = compare(p1_best_rank.high_card, p2_best_rank.high_card)
