@@ -377,12 +377,10 @@ if __name__ == '__main__':
         button = 1 if button == 2 else 2
         round += 1
     
-    print("{1} Stack Size: {0}".format(p1.stack, p1.name))
-    print("{1} Stack Size: {0}\n\n".format(p2.stack, p2.name))
     if p1.stack > p2.stack:
-        print("---------------\nPlayer 1 wins!")
+        print("---------------\nPlayer 1 wins!\n---------------")
     else:
-        print("---------------\nPlayer 2 wins!")
+        print("---------------\nPlayer 2 wins!\n---------------")
 
     # end timer
     print("--- Execution Time: {0} ---".format(
