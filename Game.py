@@ -154,12 +154,20 @@ if __name__ == '__main__':
         # betting loop
         p1_bet, p2_bet = -1, -1
         while p1_bet < 0:
-            bet = int(input("How much will you bet?"))
+            bet = input("How much will you bet?")
+            if bet == '':
+                bet = 0
+            else:
+                bet = int(bet)
             if p1.can_bet(bet):
                 p1_bet = bet
                 pot += p1.bet(p1_bet)
         while p2_bet < 0:
-            #bet = int(input("How much will you bet?"))
+            #bet = input("How much will you bet?")
+            #if bet == '':
+            #    bet = 0
+            #else:
+            #    bet = int(bet)
             bet = p1_bet # p2 is always calling for now until AI is implemented
             if p2.can_bet(bet):
                 p2_bet = bet
@@ -180,12 +188,20 @@ if __name__ == '__main__':
         # betting loop
         p1_bet, p2_bet = -1, -1
         while p1_bet < 0:
-            bet = int(input("How much will you bet?"))
+            bet = input("How much will you bet?")
+            if bet == '':
+                bet = 0
+            else:
+                bet = int(bet)
             if p1.can_bet(bet):
                 p1_bet = bet
                 pot += p1.bet(p1_bet)
         while p2_bet < 0:
-            #bet = int(input("How much will you bet?"))
+            #bet = input("How much will you bet?")
+            #if bet == '':
+            #    bet = 0
+            #else:
+            #    bet = int(bet)
             bet = p1_bet # p2 is always calling for now until AI is implemented
             if p2.can_bet(bet):
                 p2_bet = bet
@@ -206,12 +222,20 @@ if __name__ == '__main__':
         # betting loop
         p1_bet, p2_bet = -1, -1
         while p1_bet < 0:
-            bet = int(input("How much will you bet?"))
+            bet = input("How much will you bet?")
+            if bet == '':
+                bet = 0
+            else:
+                bet = int(bet)
             if p1.can_bet(bet):
                 p1_bet = bet
                 pot += p1.bet(p1_bet)
         while p2_bet < 0:
-            #bet = int(input("How much will you bet?"))
+            #bet = input("How much will you bet?")
+            #if bet == '':
+            #    bet = 0
+            #else:
+            #    bet = int(bet)
             bet = p1_bet # p2 is always calling for now until AI is implemented
             if p2.can_bet(bet):
                 p2_bet = bet
@@ -232,12 +256,20 @@ if __name__ == '__main__':
         # betting loop
         p1_bet, p2_bet = -1, -1
         while p1_bet < 0:
-            bet = int(input("How much will you bet?"))
+            bet = input("How much will you bet?")
+            if bet == '':
+                bet = 0
+            else:
+                bet = int(bet)
             if p1.can_bet(bet):
                 p1_bet = bet
                 pot += p1.bet(p1_bet)
         while p2_bet < 0:
-            #bet = int(input("How much will you bet?"))
+            #bet = input("How much will you bet?")
+            #if bet == '':
+            #    bet = 0
+            #else:
+            #    bet = int(bet)
             bet = p1_bet # p2 is always calling for now until AI is implemented
             if p2.can_bet(bet):
                 p2_bet = bet
