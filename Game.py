@@ -117,25 +117,25 @@ def compare(p1_value, p2_value):
 def compare_player_hands(p1_best_rank, p2_best_rank):
     winner = ""
     if p1_best_rank.rank == 1: # high card
-        winner = compare(p1_best_rank.high_card, p2_best_rank.high_card)
+        winner = compare(p1_best_rank.high_card.value, p2_best_rank.high_card.value)
     elif p1_best_rank.rank == 2: # one pair
         winner = compare(p1_best_rank.one_pair["value"], p2_best_rank.one_pair["value"])
         if winner == "tie":
-            winner = compare(p1_best_rank.high_card, p2_best_rank.high_card)
+            winner = compare(p1_best_rank.high_card.value, p2_best_rank.high_card.value)
     elif p1_best_rank.rank == 3: # two pair
         winner = compare(p1_best_rank.two_pair["high"], p2_best_rank.two_pair["high"])
         if winner == "tie":
             winner = compare(p1_best_rank.two_pair["low"], p2_best_rank.two_pair["low"])
             if winner == "tie":
-                winner = compare(p1_best_rank.high_card, p2_best_rank.high_card)
+                winner = compare(p1_best_rank.high_card.value, p2_best_rank.high_card.value)
     elif p1_best_rank.rank == 4: # three of a kind
         winner = compare(p1_best_rank.three_of_a_kind["value"], p2_best_rank.three_of_a_kind["value"])
         if winner == "tie":
-            winner = compare(p1_best_rank.high_card, p2_best_rank.high_card)
+            winner = compare(p1_best_rank.high_card.value, p2_best_rank.high_card.value)
     elif p1_best_rank.rank == 5: # straight
         winner = compare(p1_best_rank.straight["high"], p2_best_rank.straight["high"])
         if winner == "tie":
-            winner = compare(p1_best_rank.high_card, p2_best_rank.high_card)
+            winner = compare(p1_best_rank.high_card.value, p2_best_rank.high_card.value)
     elif p1_best_rank.rank == 6: # flush
         winner = compare(p1_best_rank.card_list[-1], p2_best_rank.card_list[-1])
         if winner == "tie":
@@ -153,7 +153,7 @@ def compare_player_hands(p1_best_rank, p2_best_rank):
     elif p1_best_rank.rank == 8: # four of a kind
         winner = compare(p1_best_rank.four_of_a_kind["value"], p2_best_rank.four_of_a_kind["value"])
         if winner == "tie":
-            winner = compare(p1_best_rank.high_card, p2_best_rank.high_card)
+            winner = compare(p1_best_rank.high_card.value, p2_best_rank.high_card.value)
     elif p1_best_rank.rank == 9: # straight flush
         winner = compare(p1_best_rank.straight_flush["high"], p2_best_rank.straight_flush["high"])
     # no royal flush tie possible
