@@ -27,32 +27,48 @@ def get_straights(in_play, in_hand):
     return straights
 
 def print_card_list(card_list):
-    print("{0}, {1}, {2}, {3}".format(card_list[0].get_card(), card_list[1].get_card(), card_list[2].get_card(), card_list[3].get_card()))
+    card_list = list(card_list)
+    if len(card_list) == 4:
+        print("{0}, {1}, {2}, {3}".format(card_list[0].get_card(), card_list[1].get_card(), card_list[2].get_card(), card_list[3].get_card()))
+    if len(card_list) == 5:
+        print("{0}, {1}, {2}, {3}, {4}".format(card_list[0].get_card(), card_list[1].get_card(), card_list[2].get_card(), card_list[3].get_card(), card_list[4].get_card()))
+
+def compare_card(card_1, card_2):
+    if ((card_1.value == card_2.value) and (card_1.suit == card_2.suit)):
+        return True
+    else:
+        return False
 
 # returns set of cards that are outs
 def get_straight_outs(straights, in_hand, in_play):
     outs = set()
+    potential_cards = in_play + in_hand
+    sort(potential_cards)
+    #print_card_list(potential_cards)
+    #print("----------")
     for straight in straights:
         lower = straight[0]
-        #print(lower.get_card())
+        #print("lower: {0}".format(lower.get_card()))
         upper = straight[-1]
-        #print(upper.get_card())
-        if lower.value == 2:
-            upper_outs = {Card.Card(upper.value+1, "Diamonds"), Card.Card(upper.value+1, "Hearts"), Card.Card(upper.value+1, "Spades"), Card.Card(upper.value+1, "Clubs")}
-            outs.update(upper_outs)
-        elif upper.value == 14:
-            lower_outs = {Card.Card(lower.value-1, "Diamonds"), Card.Card(lower.value-1, "Hearts"), Card.Card(lower.value-1, "Spades"), Card.Card(lower.value-1, "Clubs")}
-            outs.update(lower_outs)
-        else:
-            lower_outs = {Card.Card(lower.value-1, "Diamonds"), Card.Card(lower.value-1, "Hearts"), Card.Card(lower.value-1, "Spades"), Card.Card(lower.value-1, "Clubs")}
-            upper_outs = {Card.Card(upper.value+1, "Diamonds"), Card.Card(upper.value+1, "Hearts"), Card.Card(upper.value+1, "Spades"), Card.Card(upper.value+1, "Clubs")}
-            outs.update(lower_outs)
-            outs.update(upper_outs)
-    # need to move this chunk into above loop
-    for card in outs:
-        if ((card in in_hand) or (card in in_play)):
-            outs.remove(card)
-    #################
+        #print("upper: {0}".format(upper.get_card()))
+        lower_outs = {Card.Card(lower.value-1, "Diamonds"), Card.Card(lower.value-1, "Hearts"), Card.Card(lower.value-1, "Spades"), Card.Card(lower.value-1, "Clubs")}
+        #print_card_list(lower_outs)
+        upper_outs = {Card.Card(upper.value+1, "Diamonds"), Card.Card(upper.value+1, "Hearts"), Card.Card(upper.value+1, "Spades"), Card.Card(upper.value+1, "Clubs")}
+        #print_card_list(upper_outs)
+        upper_out_status, lower_out_status = True, True
+        for card in potential_cards:
+            #print(card.get_card())
+            if card.value == list(upper_outs)[0].value:
+                upper_out_status = False
+            if card.value == list(lower_outs)[0].value:
+                lower_out_status = False
+        #print("upper_out_status: {0}".format(upper_out_status))
+        #print("lower_out_status: {0}".format(lower_out_status))
+        if upper_out_status and upper.value != 14:
+                outs.update(upper_outs)
+        if lower_out_status and lower.value != 2:
+                outs.update(lower_outs)
+        #print("----------")
     return outs
 
 
@@ -75,8 +91,10 @@ straights = get_straights(in_play, in_hand)
 print("Straights")
 for cards in straights:
     print_card_list(cards)
+print("----------")
 
 outs = get_straight_outs(straights, in_hand, in_play)
 print("Outs")
 for card in outs:
     print(card.get_card())
+print("----------")
