@@ -33,12 +33,6 @@ def print_card_list(card_list):
     if len(card_list) == 5:
         print("{0}, {1}, {2}, {3}, {4}".format(card_list[0].get_card(), card_list[1].get_card(), card_list[2].get_card(), card_list[3].get_card(), card_list[4].get_card()))
 
-def compare_card(card_1, card_2):
-    if ((card_1.value == card_2.value) and (card_1.suit == card_2.suit)):
-        return True
-    else:
-        return False
-
 # returns set of cards that are outs
 def get_straight_outs(straights, in_hand, in_play):
     outs = set()
@@ -73,7 +67,7 @@ def get_straight_outs(straights, in_hand, in_play):
 
 
 #in_deck = Deck.Deck()
-in_hand = [Card.Card(7, "Diamonds"), Card.Card(3, "Diamonds")]
+in_hand = [Card.Card(14, "Diamonds"), Card.Card(3, "Diamonds")]
 #in_hand = []
 #in_hand.append(deck.deal())
 #in_hand.append(deck.deal())
