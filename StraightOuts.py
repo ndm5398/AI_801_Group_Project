@@ -69,23 +69,31 @@ def get_straight_outs(straights, in_hand, in_play):
         #print("----------")
     return outs
 
-'''
-if __name__ == '__main__':
-    #in_deck = Deck.Deck()
-    #in_hand = []
-    #in_hand.append(deck.deal())
-    #in_hand.append(deck.deal())
-    #in_play = []
-    #in_play.append(deck.deal())
-    #in_play.append(deck.deal())
-    #in_play.append(deck.deal())
 
-    #hardcoded values
+if __name__ == '__main__':
+    
+    # Uncomment to test with random cards
+    '''
+    in_deck = Deck.Deck()
+    in_hand, in_play, in_discard = [], [], []
+    in_hand.append(deck.deal())
+    in_hand.append(deck.deal())
+    in_discard.append(deck.deal())
+    in_play.append(deck.deal())
+    in_play.append(deck.deal())
+    in_play.append(deck.deal())
+    in_discard.append(deck.deal())
+    in_play.append(deck.deal())
+    in_discard.append(deck.deal())
+    in_play.append(deck.deal())
+    '''
+
+    #hardcoded test values
     in_hand = [Card.Card(2, "Diamonds"), Card.Card(3, "Diamonds")]
-    in_play = [Card.Card(4, "Diamonds"), Card.Card(5, "Diamonds"), Card.Card(6, "Diamonds")]
+    in_play = [Card.Card(4, "Diamonds"), Card.Card(5, "Diamonds"), Card.Card(6, "Spades"), Card.Card(10, "Hearts"), Card.Card(14, "Clubs")]
 
     print("In Hand: {0}, {1}".format(in_hand[0].get_card(), in_hand[1].get_card()))
-    print("In Play: {0}, {1}, {2}".format(in_play[0].get_card(), in_play[1].get_card(), in_play[2].get_card()))
+    print("In Play: {0}, {1}, {2}, {3}, {4}".format(in_play[0].get_card(), in_play[1].get_card(), in_play[2].get_card(), in_play[3].get_card(), in_play[4].get_card()))
 
     straights = get_straights(in_play, in_hand)
     print("Straights")
@@ -98,4 +106,3 @@ if __name__ == '__main__':
     for card in outs:
         print(card.get_card())
     print("----------")
-'''

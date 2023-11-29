@@ -1,5 +1,5 @@
 from Player import Player
-import StraightOuts
+import StraightOuts, FlushOuts
 
 
 class Agent(Player):
@@ -50,4 +50,6 @@ class Agent(Player):
         return outs
 
     def get_outs_to_a_flush(self, in_play):
-        return 0
+        flushes = FlushOuts.get_flushes(in_play, self.hand)
+        outs = FlushOuts.get_flush_outs(flushes, self.hand, in_play)
+        return outs
