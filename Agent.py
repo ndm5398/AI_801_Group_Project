@@ -1,4 +1,5 @@
 from Player import Player
+import StraightOuts
 
 
 class Agent(Player):
@@ -44,7 +45,9 @@ class Agent(Player):
     def get_outs_to_a_straight(self, in_play):
         # Cycle through all straight scenarios, if 4 of cards in a scenario are in play or in the hand
         # we found an out. Then determine how many of the 5th card remain in play
-        return 0
+        straights = StraightOuts.get_straights(in_play, self.hand)
+        outs = StraightOuts.get_straight_outs(straights, self.hand, in_play)
+        return outs
 
     def get_outs_to_a_flush(self, in_play):
         return 0
