@@ -23,6 +23,7 @@ def deal_flop():
     for x in range(3):
         in_play.append(in_deck.deal())
     print("In play: {0}\n".format(get_card_list(in_play)))
+    time.sleep(1)
 
 
 
@@ -30,6 +31,7 @@ def deal_turn():
     in_discard.append(in_deck.deal())
     in_play.append(in_deck.deal())
     print("In play: {0}\n".format(get_card_list(in_play)))
+    time.sleep(1)
 
 
 
@@ -37,6 +39,7 @@ def deal_river():
     in_discard.append(in_deck.deal())
     in_play.append(in_deck.deal())
     print("In play: {0}\n".format(get_card_list(in_play)))
+    time.sleep(1)
 
 
 
@@ -112,7 +115,9 @@ def perform_stage(first, second, pot, cards):
 
 
 def player_response(player):
-    return int(input("How much will you bet? [-1 to fold]"))
+    bet = int(input("How much will you bet? [-1 to fold]"))
+    amount = bet if bet < player.stack else player.stack
+    return amount
 
 def ai_response(ai, player, action, bet, pot, cards):
     ai_action = ai.determine_action(player, action, bet, pot, cards)
@@ -146,6 +151,8 @@ def determine_action(bet, previous_action):
 def handle_action(player, action, bet):
     if action == "CALL" or action == "RAISE":
         player.bet(bet)
+        if (player.stack == 0):
+            print("{0} is all in".format(player.name))
         return bet        
     else:
         return 0
@@ -220,9 +227,10 @@ if __name__ == '__main__':
             print_stage()
             # Perform flop actions
             deal_flop()
-            result = perform_stage(p1, p2, pot, in_play)
-            pot = result[0]
-            folded = check_for_fold(result)
+            if not (p1.stack == 0 or p2.stack == 0):
+                result = perform_stage(p1, p2, pot, in_play)
+                pot = result[0]
+                folded = check_for_fold(result)
             print("Total pot: {0}\n".format(pot))
 
         # TURN STAGE
@@ -232,9 +240,10 @@ if __name__ == '__main__':
             print_stage()
             # Perform turn actions
             deal_turn()
-            result = perform_stage(p1, p2, pot, in_play)
-            pot = result[0]
-            folded = check_for_fold(result)
+            if not (p1.stack == 0 or p2.stack == 0):
+                result = perform_stage(p1, p2, pot, in_play)
+                pot = result[0]
+                folded = check_for_fold(result)
             print("Total pot: {0}\n".format(pot))
 
         # RIVER STAGE
@@ -244,9 +253,10 @@ if __name__ == '__main__':
             print_stage()
             # Perform river actions
             deal_river()
-            result = perform_stage(p1, p2, pot, in_play)
-            pot = result[0]
-            folded = check_for_fold(result)
+            if not (p1.stack == 0 or p2.stack == 0):
+                result = perform_stage(p1, p2, pot, in_play)
+                pot = result[0]
+                folded = check_for_fold(result)
             print("Total pot: {0}\n".format(pot))
 
         if (folded):
@@ -310,7 +320,7 @@ if __name__ == '__main__':
         p2.swap_button()
         button = 1 if button == 2 else 2
         round += 1
-        time.sleep(5)
+        time.sleep(4)
 
     # end timer
     print("--- Execution Time: {0} ---".format(
