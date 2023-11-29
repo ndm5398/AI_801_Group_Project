@@ -1,5 +1,5 @@
 from Player import Player
-import StraightOuts
+import StraightOuts, FlushOuts
 from Rank import Rank
 from itertools import combinations
 
@@ -59,10 +59,14 @@ class Agent(Player):
     def get_outs_to_a_straight(self, in_play):
         # Cycle through all straight scenarios, if 4 of cards in a scenario are in play or in the hand
         # we found an out. Then determine how many of the 5th card remain in play
-        return 0
+        straights = StraightOuts.get_straights(in_play, self.hand.in_hand)
+        outs = StraightOuts.get_straight_outs(straights, self.hand.in_hand, in_play)
+        return len(outs)
 
     def get_outs_to_a_flush(self, in_play):
-        return 0
+        flushes = FlushOuts.get_flushes(in_play, self.hand.in_hand)
+        outs = FlushOuts.get_flush_outs(flushes, self.hand.in_hand, in_play)
+        return len(outs)
 
     def rank_player_possible_hands(self, in_play):
         potential_cards = in_play + self.hand.in_hand
