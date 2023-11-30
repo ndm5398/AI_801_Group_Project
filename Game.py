@@ -51,7 +51,123 @@ def rank_player_possible_hands(player, cards_in_play):
         current_rank = Rank(list(entry))
         if current_rank.rank > best_rank.rank:
             best_rank = current_rank
+        elif current_rank.rank == best_rank.rank:
+            if current_rank.rank == 1: # high card
+                if current_rank.high_card.value > best_rank.high_card.value:
+                    best_rank = current_rank
+            elif current_rank.rank == 2: # one pair
+                if current_rank.one_pair["value"] > best_rank.one_pair["value"]:
+                    best_rank = current_rank
+                elif current_rank.one_pair["value"] == best_rank.one_pair["value"]:
+                    if current_rank.high_card.value > best_rank.high_card.value:
+                        best_rank = current_rank
+            elif current_rank.rank == 3: # two pair
+                if current_rank.two_pair["high"] > best_rank.two_pair["high"]:
+                    best_rank = current_rank
+                elif current_rank.two_pair["high"] == best_rank.two_pair["high"]:
+                    if current_rank.two_pair["low"] > best_rank.two_pair["low"]:
+                        best_rank = current_rank
+                    elif current_rank.two_pair["low"] == best_rank.two_pair["low"]:
+                        if current_rank.high_card.value > best_rank.high_card.value:
+                            best_rank = current_rank
+            elif current_rank.rank == 4: # three of a kind
+                if current_rank.three_of_a_kind["value"] > best_rank.three_of_a_kind["value"]:
+                    best_rank = current_rank
+                elif current_rank.three_of_a_kind["value"] == best_rank.three_of_a_kind["value"]:
+                    if current_rank.high_card.value > best_rank.high_card.value:
+                        best_rank = current_rank
+            elif current_rank.rank == 5: # straight
+                if current_rank.straight["high"] > best_rank.straight["high"]:
+                    best_rank = current_rank
+                elif current_rank.straight["high"] == best_rank.straight["high"]:
+                    if current_rank.high_card.value > best_rank.high_card.value:
+                        best_rank = current_rank
+            elif current_rank.rank == 6: # flush
+                if current_rank.card_list[-1] > best_rank.card_list[-1]:
+                    best_rank = current_rank
+                elif current_rank.card_list[-1] == best_rank.card_list[-1]:
+                    if current_rank.card_list[-2] > best_rank.card_list[-2]:
+                        best_rank = current_rank
+                    elif current_rank.card_list[-2] == best_rank.card_list[-2]:
+                        if current_rank.card_list[-3] > best_rank.card_list[-3]:
+                            best_rank = current_rank
+                        elif current_rank.card_list[-3] == best_rank.card_list[-3]:
+                            if current_rank.card_list[-4] > best_rank.card_list[-4]:
+                                best_rank = current_rank
+                            elif current_rank.card_list[-4] == best_rank.card_list[-4]:
+                                if current_rank.card_list[-5] > best_rank.card_list[-5]:
+                                    best_rank = current_rank
+            elif current_rank.rank == 7: # full house
+                if current_rank.full_house["three_of_a_kind_value"] > best_rank.full_house["three_of_a_kind_value"]:
+                    best_rank = current_rank
+                elif current_rank.full_house["three_of_a_kind_value"] == best_rank.full_house["three_of_a_kind_value"]:
+                    if current_rank.full_house["one_pair_value"] > best_rank.full_house["one_pair_value"]:
+                        best_rank = current_rank
+            elif current_rank.rank == 8: # four of a kind
+                if current_rank.four_of_a_kind["value"] > best_rank.four_of_a_kind["value"]:
+                    best_rank = current_rank
+                elif current_rank.four_of_a_kind["value"] == best_rank.four_of_a_kind["value"]:
+                    if current_rank.high_card.value > best_rank.high_card.value:
+                        best_rank = current_rank
+            elif current_rank.rank == 9: # straight flush
+                if current_rank.straight_flush["high"] > best_rank.straight_flush["high"]:
+                    best_rank = current_rank
+            # no royal flush tie possible
     return best_rank
+
+def compare(p1_value, p2_value):
+    if p1_value > p2_value:
+        return "p1"
+    elif p2_value > p1_value:
+        return "p2"
+    else:
+        return "tie"
+
+# somewhat duplicate from hand ranking code, will optimize in the future
+def compare_player_hands(p1_best_rank, p2_best_rank):
+    winner = ""
+    if p1_best_rank.rank == 1: # high card
+        winner = compare(p1_best_rank.high_card.value, p2_best_rank.high_card.value)
+    elif p1_best_rank.rank == 2: # one pair
+        winner = compare(p1_best_rank.one_pair["value"], p2_best_rank.one_pair["value"])
+        if winner == "tie":
+            winner = compare(p1_best_rank.high_card.value, p2_best_rank.high_card.value)
+    elif p1_best_rank.rank == 3: # two pair
+        winner = compare(p1_best_rank.two_pair["high"], p2_best_rank.two_pair["high"])
+        if winner == "tie":
+            winner = compare(p1_best_rank.two_pair["low"], p2_best_rank.two_pair["low"])
+            if winner == "tie":
+                winner = compare(p1_best_rank.high_card.value, p2_best_rank.high_card.value)
+    elif p1_best_rank.rank == 4: # three of a kind
+        winner = compare(p1_best_rank.three_of_a_kind["value"], p2_best_rank.three_of_a_kind["value"])
+        if winner == "tie":
+            winner = compare(p1_best_rank.high_card.value, p2_best_rank.high_card.value)
+    elif p1_best_rank.rank == 5: # straight
+        winner = compare(p1_best_rank.straight["high"], p2_best_rank.straight["high"])
+        if winner == "tie":
+            winner = compare(p1_best_rank.high_card.value, p2_best_rank.high_card.value)
+    elif p1_best_rank.rank == 6: # flush
+        winner = compare(p1_best_rank.card_list[-1], p2_best_rank.card_list[-1])
+        if winner == "tie":
+            winner = compare(p1_best_rank.card_list[-2], p2_best_rank.card_list[-2])
+            if winner == "tie":
+                winner = compare(p1_best_rank.card_list[-3], p2_best_rank.card_list[-3])
+                if winner == "tie":
+                    winner = compare(p1_best_rank.card_list[-4], p2_best_rank.card_list[-4])
+                    if winner == "tie":
+                        winner = compare(p1_best_rank.card_list[-5], p2_best_rank.card_list[-5])
+    elif p1_best_rank.rank == 7: # full house
+        winner = compare(p1_best_rank.full_house["three_of_a_kind_value"], p2_best_rank.full_house["three_of_a_kind_value"])
+        if winner == "tie":
+            winner = compare(p1_best_rank.full_house["one_pair_value"], p2_best_rank.full_house["one_pair_value"])
+    elif p1_best_rank.rank == 8: # four of a kind
+        winner = compare(p1_best_rank.four_of_a_kind["value"], p2_best_rank.four_of_a_kind["value"])
+        if winner == "tie":
+            winner = compare(p1_best_rank.high_card.value, p2_best_rank.high_card.value)
+    elif p1_best_rank.rank == 9: # straight flush
+        winner = compare(p1_best_rank.straight_flush["high"], p2_best_rank.straight_flush["high"])
+    # no royal flush tie possible
+    return winner
 
 
 def get_card_list(card_objects_list):
@@ -301,10 +417,11 @@ if __name__ == '__main__':
                     p2.stack += pot
                     print("\n{0} Wins\n".format(p2.name))
                 else:
-                    if p1_best_rank.high_card.value > p2_best_rank.high_card.value:
+                    winner = compare_player_hands(p1_best_rank, p2_best_rank)
+                    if winner == "p1":
                         p1.stack += pot
                         print("\n{0} Wins\n".format(p1.name))
-                    elif p2_best_rank.high_card.value > p1_best_rank.high_card.value:
+                    elif winner == "p2":
                         p2.stack += pot
                         print("\n{0} Wins\n".format(p2.name))
                     else:
@@ -320,7 +437,12 @@ if __name__ == '__main__':
         p2.swap_button()
         button = 1 if button == 2 else 2
         round += 1
-        time.sleep(4)
+        time.sleep(1)
+    
+    if p1.stack > p2.stack:
+        print("---------------\nPlayer 1 wins!\n---------------")
+    else:
+        print("---------------\nPlayer 2 wins!\n---------------")
 
     # end timer
     print("--- Execution Time: {0} ---".format(

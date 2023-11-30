@@ -27,18 +27,20 @@ class Player():
     def swap_button(self):
         self.button = not self.button
 
-    def bet(self, value):
-        if self.is_stack_empty():
-            print("Can not bet anymore, you are all in")
+    def can_bet(self, value):
+        if (self.is_stack_empty() and (value > 0)):
+            print("ERROR: {0} stack is empty".format(self.name))
+            return False
+        elif (self.stack - value) < 0:
+            print("ERROR: {0} Not enough chips to bet {1}".format(self.name, value))
+            return False
         else:
-            if (self.stack - value) < 0:
-                print("Not enough chips to bet {1}, you are all in".format(
-                    self.name, value))
-                self.stack = 0
-                return self.stack
-            else:
-                self.stack -= value
-                return value
+            return True
+
+    def bet(self, value):
+        if self.can_bet(value):
+            self.stack -= value
+            return value
 
     def bet_all_in(self):
         if self.is_stack_empty():
