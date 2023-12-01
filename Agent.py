@@ -1,5 +1,5 @@
 from Player import Player
-import StraightOuts, FlushOuts
+import StraightOuts, FlushOuts, BoardTexture
 from Rank import Rank
 from itertools import combinations
 
@@ -34,11 +34,16 @@ class Agent(Player):
         if len(in_play) > 0:
             rank = self.rank_player_possible_hands(in_play)
             print("Hand rank: " + str(rank.rank))
-            if (rank.rank < 2):
-                return False
+
+            # Flushes are stronger than straights and dry boards, so we check that first
+            tones = BoardTexture.board_tone(in_play)
+            if len(tones) > 0:
+                # Should return false unless we have a flush or greater
+                return rank.rank > 5
+            elif BoardTexture.board_connectivity(in_play):
+                return rank.rank > 4
             else:
-                
-                return True
+                return rank.rank > 2 
         else:
             # Handle special preflop state
             return True
