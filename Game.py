@@ -312,7 +312,10 @@ if __name__ == '__main__':
     player_1 = Agent.Agent("AI")
     player_1.swap_button()
     button = 1
-    player_2 = Player.Player(input("What is the name of the player? "))
+    player_name = input("What is the name of the player? ")
+    player_2 = Player.Player(player_name)
+    player_1.load_player_data(player_name)
+
     round = 1
 
     while (can_play(player_1) & can_play(player_2)):
@@ -457,6 +460,9 @@ if __name__ == '__main__':
         print("---------------\nPlayer 1 wins!\n---------------")
     else:
         print("---------------\nPlayer 2 wins!\n---------------")
+
+    # Save player data
+    player_1.save_player_data()
 
     # end timer
     print("--- Execution Time: {0} ---".format(

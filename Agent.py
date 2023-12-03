@@ -2,17 +2,43 @@ from Player import Player
 import StraightOuts, FlushOuts, BoardTexture
 from Rank import Rank
 from itertools import combinations
+import json
+import random
 
 class Agent(Player):
 
     def __init__(self, name):
         Player.__init__(self, name)
 
+    def load_player_data(self, name):
+        f = open("player_database.json")
+        data = json.load(f)
+        self.opponent_name = name
+        self.opponent_data = data[name] if name in data.keys() else self.generate_opponent_data()
+        print(self.opponent_data)
+        f.close()
+
+    def generate_opponent_data(self):
+        self.new_opponent = True
+        opponent_data = {}
+        opponent_data["hand_played_frequency"] = 0
+        return opponent_data
+    
+    def save_player_data(self):
+        f = open("player_database.json")
+        data = json.load(f)
+        f.close()
+
+        data[self.opponent_name] = self.opponent_data
+        with open("player_database.json", "w") as outfile:
+            outfile.write(json.dumps(data))
+        f.close()
+
     def determine_action(self, opponent, action, bet, pot, in_play):
         if action == "CHECK":
-            # Should check for now
-            if self.hand_is_ahead(in_play):
+            # If hand is ahead, then raise, but only 50 percent of the time to remain balanced
 
+            if self.hand_is_ahead(in_play) and random.random() > 0.5:
                 return "RAISE"
             return "CHECK"
         elif action == "RAISE":
