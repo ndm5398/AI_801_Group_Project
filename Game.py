@@ -286,22 +286,22 @@ def check_for_fold(result):
 def print_stage():
     # Uncomment to hide AI hand
 
-    # if (p1.name == "AI"):
-    #     print("{1} \t({0})\tCards: \t[ ? , ? ]".format(
-    #         p1.stack, p1.name))
-    #     print("{2} \t({1})\tCards: \t{0}".format(
-    #         get_card_list(p2.hand.in_hand), p2.stack, p2.name))
-    # else:
-    #     print("{2} \t({1})\tCards: \t{0}".format(
-    #         get_card_list(p1.hand.in_hand), p1.stack, p1.name))
-    #     print("{1} \t({0})\tCards: \t[ ? , ? ]".format(
-    #         p2.stack, p2.name))
+    if (p1.name == "AI"):
+        print("{1} \t({0})\tCards: \t[ ? , ? ]".format(
+            p1.stack, p1.name))
+        print("{2} \t({1})\tCards: \t{0}".format(
+            get_card_list(p2.hand.in_hand), p2.stack, p2.name))
+    else:
+        print("{2} \t({1})\tCards: \t{0}".format(
+            get_card_list(p1.hand.in_hand), p1.stack, p1.name))
+        print("{1} \t({0})\tCards: \t[ ? , ? ]".format(
+            p2.stack, p2.name))
         
     # Comment when hiding AI hands
-    print("{2} \t({1})\tCards: \t{0}".format(
-            get_card_list(p1.hand.in_hand), p1.stack, p1.name))
-    print("{2} \t({1})\tCards: \t{0}".format(
-            get_card_list(p2.hand.in_hand), p2.stack, p2.name))
+    # print("{2} \t({1})\tCards: \t{0}".format(
+    #         get_card_list(p1.hand.in_hand), p1.stack, p1.name))
+    # print("{2} \t({1})\tCards: \t{0}".format(
+    #         get_card_list(p2.hand.in_hand), p2.stack, p2.name))
 
 
 
