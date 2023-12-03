@@ -12,7 +12,7 @@ class Player():
     def __init__(self, name):
         self.name = name
         self.hand = Hand.Hand()
-        self.stack = 10
+        self.stack = 100
         self.button = False
 
     def is_stack_empty(self):

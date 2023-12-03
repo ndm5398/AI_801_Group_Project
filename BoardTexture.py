@@ -4,14 +4,14 @@ def board_connectivity(in_play):
     sorted = StraightOuts.sort(in_play)
     connects = 0
     for i in range(0, len(sorted)):
+        if i + 1 >= len(sorted):
+            break
         if sorted[i].value + 1 == sorted[i + 1].value:
             connects += 1
             if connects == 3:
                 return True
         else:
             connects = 0
-        if i + 1 >= len(sorted):
-            break
     return False
 
 def board_tone(in_play):

@@ -11,6 +11,9 @@ class Agent(Player):
     def determine_action(self, opponent, action, bet, pot, in_play):
         if action == "CHECK":
             # Should check for now
+            if self.hand_is_ahead(in_play):
+
+                return "RAISE"
             return "CHECK"
         elif action == "RAISE":
             # Guess if we are ahead or behind
