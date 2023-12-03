@@ -315,19 +315,18 @@ def preflop_evaluate(hand):
     if low.value > 10:
         low_broadway = True
 
-    #check for broadway combo: 10s, Js, Qs, Ks, As,
-    if low_broadway:
+    #check for broadway combo or pocket pair
+    if low_broadway or pair:
         return "CALL"
     #check suited
     elif suited:
         #check A, K, Q w/ non-broadway or connected
         if (high.value > 11) or connected:
             return "CALL"
-    #check pocket pair 
-    elif pair:
-        return "CALL"
+        else:
+            return "FOLD"
     #check connected cards w/ low greater than 4
-    elif connected and low.value > 4:
+    elif connected and (low.value > 4):
         return "CALL"
     else:
         return "FOLD"
