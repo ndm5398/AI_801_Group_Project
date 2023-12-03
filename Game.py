@@ -303,34 +303,6 @@ def print_stage():
     print("{2} \t({1})\tCards: \t{0}".format(
             get_card_list(p2.hand.in_hand), p2.stack, p2.name))
 
-# Used to determine if AI should call when player raised preflop
-def preflop_evaluate(hand):
-    hand.sort_hand()
-    low, high = hand.in_hand[0], hand.in_hand[1]
-    suited = hand.is_suited()
-    connected = hand.is_connected()
-    pair, low_broadway = False, False
-    if low.value == high.value:
-        pair = True
-    if low.value > 10:
-        low_broadway = True
-
-    #check for broadway combo or pocket pair
-    if low_broadway or pair:
-        return "CALL"
-    #check suited
-    elif suited:
-        #check A, K, Q w/ non-broadway or connected
-        if (high.value > 11) or connected:
-            return "CALL"
-        else:
-            return "FOLD"
-    #check connected cards w/ low greater than 4
-    elif connected and (low.value > 4):
-        return "CALL"
-    else:
-        return "FOLD"
-
 
 
 if __name__ == '__main__':

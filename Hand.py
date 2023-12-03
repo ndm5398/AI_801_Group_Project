@@ -1,5 +1,3 @@
-import math
-
 
 class Hand:
 
@@ -25,7 +23,7 @@ class Hand:
         return self.in_hand[0].suit == self.in_hand[1].suit
 
     def is_connected(self):
-        return math.abs(self.in_hand[0].value - self.in_hand[1].value) == 1
+        return abs(self.in_hand[0].value - self.in_hand[1].value) == 1
 
     def is_broadway(self):
         return self.in_hand[0].value > 10 and self.in_hand[1].value > 10

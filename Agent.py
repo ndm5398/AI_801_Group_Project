@@ -4,6 +4,7 @@ from Rank import Rank
 from itertools import combinations
 import json
 import random
+import Hand
 
 class Agent(Player):
 
@@ -35,6 +36,11 @@ class Agent(Player):
         f.close()
 
     def determine_action(self, opponent, action, bet, pot, in_play):
+        # For pre flop action
+        if len(in_play) == 0:
+            return self.preflop_evaluate(action)
+
+        # For post flop action
         if action == "CHECK":
             # If hand is ahead, then raise, but only 50 percent of the time to remain balanced
 
@@ -57,6 +63,39 @@ class Agent(Player):
                 else:
                     print("Not enough equity to call. AI is folding...")
                     return "FOLD"
+    
+    # Used to determine if AI should call when player raised preflop
+    def preflop_evaluate(self, previous_action):
+        self.hand.sort_hand()
+        low, high = self.hand.in_hand[0], self.hand.in_hand[1]
+        suited = self.hand.is_suited()
+        connected = self.hand.is_connected()
+        pair, low_broadway = False, False
+        if low.value == high.value:
+            pair = True
+        if low.value > 10:
+            low_broadway = True
+
+        #check for broadway combo or pocket pair
+        if low_broadway or pair:
+            return "RAISE"
+        #check suited
+        elif suited:
+            #check A, K, Q w/ non-broadway or connected
+            if (high.value > 11) or connected:
+                return "CALL"
+            elif previous_action == "RAISE":
+                # If the player is a loose player, we want to continue playing here
+                return "CALL" if self.opponent_data["hand_played_frequency"] > 0.75 else "FOLD"
+            else:
+                return "CHECK"
+        #check connected cards w/ low greater than 4
+        elif connected and (low.value > 4):
+            return "CALL"
+        elif previous_action == "RAISE":
+            return "FOLD"
+        else:
+            return "CHECK"
     
     def hand_is_ahead(self, in_play):
         # Rank our hand if not in preflop stage
