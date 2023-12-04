@@ -1,16 +1,51 @@
 from Player import Player
-import StraightOuts, FlushOuts
+import StraightOuts, FlushOuts, BoardTexture
 from Rank import Rank
 from itertools import combinations
+import json
+import random
+import Hand
 
 class Agent(Player):
 
     def __init__(self, name):
         Player.__init__(self, name)
 
+    def load_player_data(self, name):
+        f = open("player_database.json")
+        data = json.load(f)
+        self.opponent_name = name
+        self.opponent_data = data[name] if name in data.keys() else self.generate_opponent_data()
+        print(self.opponent_data)
+        f.close()
+
+    def generate_opponent_data(self):
+        self.new_opponent = True
+        opponent_data = {}
+        opponent_data["hand_played_frequency"] = 0
+        return opponent_data
+    
+    def save_player_data(self):
+        f = open("player_database.json")
+        data = json.load(f)
+        f.close()
+
+        data[self.opponent_name] = self.opponent_data
+        with open("player_database.json", "w") as outfile:
+            outfile.write(json.dumps(data))
+        f.close()
+
     def determine_action(self, opponent, action, bet, pot, in_play):
+        # For pre flop action
+        if len(in_play) == 0:
+            return self.preflop_evaluate(action)
+
+        # For post flop action
         if action == "CHECK":
-            # Should check for now
+            # If hand is ahead, then raise, but only 50 percent of the time to remain balanced
+
+            if self.hand_is_ahead(in_play) and random.random() > 0.5:
+                return "RAISE"
             return "CHECK"
         elif action == "RAISE":
             # Guess if we are ahead or behind
@@ -29,16 +64,54 @@ class Agent(Player):
                     print("Not enough equity to call. AI is folding...")
                     return "FOLD"
     
+    # Used to determine if AI should call when player raised preflop
+    def preflop_evaluate(self, previous_action):
+        self.hand.sort_hand()
+        low, high = self.hand.in_hand[0], self.hand.in_hand[1]
+        suited = self.hand.is_suited()
+        connected = self.hand.is_connected()
+        pair, low_broadway = False, False
+        if low.value == high.value:
+            pair = True
+        if low.value > 10:
+            low_broadway = True
+
+        #check for broadway combo or pocket pair
+        if low_broadway or pair:
+            return "RAISE"
+        #check suited
+        elif suited:
+            #check A, K, Q w/ non-broadway or connected
+            if (high.value > 11) or connected:
+                return "CALL"
+            elif previous_action == "RAISE":
+                # If the player is a loose player, we want to continue playing here
+                return "CALL" if self.opponent_data["hand_played_frequency"] > 0.75 else "FOLD"
+            else:
+                return "CHECK"
+        #check connected cards w/ low greater than 4
+        elif connected and (low.value > 4):
+            return "CALL"
+        elif previous_action == "RAISE":
+            return "FOLD"
+        else:
+            return "CHECK"
+    
     def hand_is_ahead(self, in_play):
         # Rank our hand if not in preflop stage
         if len(in_play) > 0:
             rank = self.rank_player_possible_hands(in_play)
             print("Hand rank: " + str(rank.rank))
-            if (rank.rank < 2):
-                return False
+
+            # Flushes are stronger than straights and dry boards, so we check that first
+            tones = BoardTexture.board_tone(in_play)
+            if len(tones) > 0:
+                # Should return false unless we have a flush or greater
+                return rank.rank > 5
+            elif BoardTexture.board_connectivity(in_play):
+                return rank.rank > 4
             else:
-                
-                return True
+                return rank.rank > 2 
         else:
             # Handle special preflop state
             return True

@@ -8,6 +8,7 @@ import Player
 import Agent
 from Rank import Rank
 from itertools import combinations
+import math
 
 
 def can_play(player):
@@ -181,57 +182,57 @@ def perform_stage(first, second, pot, cards):
     time.sleep(1)
     player_folded = False
     ai_folded = False
-    previous_action = "CALL"
+    previous_action = "CHECK"
+    bet = 0
     if (first.name == "AI"):
-        # For now the AI agent will just check if going first
-        print("\n{0} checks.".format(first.name))
         while True:
-            bet = player_response(first)
+            bet = ai_response(first, second, previous_action, bet, pot, cards)
+            previous_action = determine_action(bet, previous_action)
+            if previous_action == "FOLD":
+                ai_folded = True
+                break
+            pot += handle_action(second, previous_action, bet)
+            if previous_action == "CALL":
+                break
+
+            bet = player_response(first, bet)
             previous_action = determine_action(bet, previous_action)
             if previous_action == "FOLD":
                 player_folded = True
                 break
             pot += handle_action(first, previous_action, bet)
-            # Have the AI determine what action it should take
-            if previous_action == "CHECK":
+            if previous_action == "CALL" or previous_action == "CHECK":
                 break
-            else:
-                bet = ai_response(first, second, previous_action, bet, pot, cards)
-                previous_action = determine_action(bet, previous_action)
-                if previous_action == "FOLD":
-                    ai_folded = True
-                    break
-                pot += handle_action(second, previous_action, bet)
-                if previous_action == "CALL":
-                    break
 
     else:
         while True:
             time.sleep(1)
-            bet = player_response(second)
+            bet = player_response(second, bet)
             previous_action = determine_action(bet, previous_action)
             if previous_action == "FOLD":
                 player_folded = True
                 break
             pot += handle_action(second, previous_action, bet)
-            if previous_action == "CHECK":
+            if previous_action == "CALL":
                 break
-            else:
-                # Have the AI determine what action it should take
-                bet = ai_response(second, first, previous_action, bet, pot, cards)
-                previous_action = determine_action(bet, previous_action)
-                if previous_action == "FOLD":
-                    ai_folded = True
-                    break
-                pot += handle_action(first, previous_action, bet)
-                if previous_action == "CALL":
-                    break
+            
+            # Have the AI determine what action it should take
+            bet = ai_response(second, first, previous_action, bet, pot, cards)
+            previous_action = determine_action(bet, previous_action)
+            if previous_action == "FOLD":
+                ai_folded = True
+                break
+            pot += handle_action(first, previous_action, bet)
+            if previous_action == "CALL" or previous_action == "CHECK":
+                break
     return [pot, player_folded, ai_folded]
 
 
 
-def player_response(player):
+def player_response(player, previous_bet):
     bet = int(input("How much will you bet? [-1 to fold]"))
+    if previous_bet > 0 and not bet == -1 and bet < previous_bet and bet < player.stack:
+        bet = previous_bet
     amount = bet if bet < player.stack else player.stack
     return amount
 
@@ -247,6 +248,12 @@ def ai_response(ai, player, action, bet, pot, cards):
         print("\nThe AI checks.\n")
         time.sleep(1)
         return 0
+    elif ai_action == "RAISE":
+        time.sleep(1)
+        bet = math.ceil(pot/2)
+        print("\nThe AI raises {}".format(bet))
+        time.sleep(1)
+        return bet
     else:
         # Raising is not yet an option
         time.sleep(1)
@@ -279,22 +286,23 @@ def check_for_fold(result):
 def print_stage():
     # Uncomment to hide AI hand
 
-    # if (p1.name == "AI"):
-    #     print("{1} \t({0})\tCards: \t[ ? , ? ]".format(
-    #         p1.stack, p1.name))
-    #     print("{2} \t({1})\tCards: \t{0}".format(
-    #         get_card_list(p2.hand.in_hand), p2.stack, p2.name))
-    # else:
-    #     print("{2} \t({1})\tCards: \t{0}".format(
-    #         get_card_list(p1.hand.in_hand), p1.stack, p1.name))
-    #     print("{1} \t({0})\tCards: \t[ ? , ? ]".format(
-    #         p2.stack, p2.name))
+    if (p1.name == "AI"):
+        print("{1} \t({0})\tCards: \t[ ? , ? ]".format(
+            p1.stack, p1.name))
+        print("{2} \t({1})\tCards: \t{0}".format(
+            get_card_list(p2.hand.in_hand), p2.stack, p2.name))
+    else:
+        print("{2} \t({1})\tCards: \t{0}".format(
+            get_card_list(p1.hand.in_hand), p1.stack, p1.name))
+        print("{1} \t({0})\tCards: \t[ ? , ? ]".format(
+            p2.stack, p2.name))
         
     # Comment when hiding AI hands
-    print("{2} \t({1})\tCards: \t{0}".format(
-            get_card_list(p1.hand.in_hand), p1.stack, p1.name))
-    print("{2} \t({1})\tCards: \t{0}".format(
-            get_card_list(p2.hand.in_hand), p2.stack, p2.name))
+    # print("{2} \t({1})\tCards: \t{0}".format(
+    #         get_card_list(p1.hand.in_hand), p1.stack, p1.name))
+    # print("{2} \t({1})\tCards: \t{0}".format(
+    #         get_card_list(p2.hand.in_hand), p2.stack, p2.name))
+
 
 
 if __name__ == '__main__':
@@ -305,7 +313,10 @@ if __name__ == '__main__':
     player_1 = Agent.Agent("AI")
     player_1.swap_button()
     button = 1
-    player_2 = Player.Player("Player")
+    player_name = input("What is the name of the player? ")
+    player_2 = Player.Player(player_name)
+    player_1.load_player_data(player_name)
+
     round = 1
 
     while (can_play(player_1) & can_play(player_2)):
@@ -327,6 +338,13 @@ if __name__ == '__main__':
         deal_to_player(p2)
         deal_to_player(p1)
         deal_to_player(p2)
+        # Put blinds into the pot
+        p1.bet(1)
+        p2.bet(1)
+        pot = 2
+        print("Putting in blinds...")
+        print("Total pot: {0}\n".format(pot))
+        time.sleep(1)
         # show player hole cards
         print_stage()
         print()
@@ -443,6 +461,9 @@ if __name__ == '__main__':
         print("---------------\nPlayer 1 wins!\n---------------")
     else:
         print("---------------\nPlayer 2 wins!\n---------------")
+
+    # Save player data
+    player_1.save_player_data()
 
     # end timer
     print("--- Execution Time: {0} ---".format(
