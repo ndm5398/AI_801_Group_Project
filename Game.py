@@ -314,6 +314,9 @@ if __name__ == '__main__':
     player_1.swap_button()
     button = 1
     player_name = input("What is the name of the player? ")
+    while player_name == "AI":
+        print("Player name cannot be \"AI\", please choose another name.")
+        player_name = input("What is the name of the player? ")
     player_2 = Player.Player(player_name)
     player_1.load_player_data(player_name)
 
@@ -404,7 +407,7 @@ if __name__ == '__main__':
             elif result[2]:
                 # AI has folded
                 print("AI has folded. Player wins a pot of {0}".format(pot))
-                if p1.name == "Player":
+                if p1.name != "AI":
                     p1.stack += pot
                 else:
                     p2.stack += pot
