@@ -119,8 +119,6 @@ class Agent(Player):
                 return rank.rank > 1
             else:
                 return rank.rank > 2
-                
-                 
         else:
             # Handle special preflop state
             return True
