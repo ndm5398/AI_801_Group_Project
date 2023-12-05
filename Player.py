@@ -41,6 +41,9 @@ class Player():
         if self.can_bet(value):
             self.stack -= value
             return value
+        else:
+            self.stack = 0
+            return self.stack
 
     def bet_all_in(self):
         if self.is_stack_empty():

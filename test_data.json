@@ -1,0 +1,18 @@
+{
+    "Player": {
+        "hands_played": 50,
+        "total_hands": 100
+    }, 
+    "Mario": {
+        "hands_played": 75,
+        "total_hands": 100
+    }, 
+    "Nick": {
+        "hands_played": 25,
+        "total_hands": 100
+    }, 
+    "NewPlayer": {
+        "hands_played": 0,
+        "total_hands": 100
+    }
+}
