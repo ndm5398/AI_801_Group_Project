@@ -78,9 +78,9 @@ def rank_player_possible_hands(player, cards_in_play):
                     if current_rank.high_card.value > best_rank.high_card.value:
                         best_rank = current_rank
             elif current_rank.rank == 5: # straight
-                if current_rank.straight["high"] > best_rank.straight["high"]:
+                if current_rank.straight["high"].value > best_rank.straight["high"].value:
                     best_rank = current_rank
-                elif current_rank.straight["high"] == best_rank.straight["high"]:
+                elif current_rank.straight["high"].value == best_rank.straight["high"].value:
                     if current_rank.high_card.value > best_rank.high_card.value:
                         best_rank = current_rank
             elif current_rank.rank == 6: # flush
