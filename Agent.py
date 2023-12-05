@@ -22,7 +22,8 @@ class Agent(Player):
     def generate_opponent_data(self):
         self.new_opponent = True
         opponent_data = {}
-        opponent_data["hand_played_frequency"] = 0
+        opponent_data["hands_played"] = 0
+        opponent_data["total_hands"] = 0
         return opponent_data
     
     def save_player_data(self):
@@ -39,6 +40,10 @@ class Agent(Player):
         # For pre flop action
         if len(in_play) == 0:
             return self.preflop_evaluate(action)
+        
+        # Always call really small bets
+        if bet > 0 and (bet/pot) <= 0.1:
+            return "CALL"
 
         # For post flop action
         if action == "CHECK":
@@ -52,16 +57,16 @@ class Agent(Player):
             # if we are ahead, call
             # else calculate pot odds to determine if we should call
             if self.hand_is_ahead(in_play):
-                print("Assuming our hand is GOOD")
+                # print("Assuming our hand is GOOD")
                 return "CALL"
             else:
-                print("Assuming our hand is BAD")
+                # print("Assuming our hand is BAD")
                 pot_odds = self.calc_pot_odds(pot, bet)
                 equity = self.calc_equity(in_play)
                 if equity > pot_odds:
                     return "CALL"
                 else:
-                    print("Not enough equity to call. AI is folding...")
+                    # print("Not enough equity to call. AI is folding...")
                     return "FOLD"
     
     # Used to determine if AI should call when player raised preflop
@@ -86,7 +91,7 @@ class Agent(Player):
                 return "CALL"
             elif previous_action == "RAISE":
                 # If the player is a loose player, we want to continue playing here
-                return "CALL" if self.opponent_data["hand_played_frequency"] > 0.75 else "FOLD"
+                return "CALL" if self.get_hands_played_freq() > 0.75 else "FOLD"
             else:
                 return "CHECK"
         #check connected cards w/ low greater than 4
@@ -101,7 +106,7 @@ class Agent(Player):
         # Rank our hand if not in preflop stage
         if len(in_play) > 0:
             rank = self.rank_player_possible_hands(in_play)
-            print("Hand rank: " + str(rank.rank))
+            # print("Hand rank: " + str(rank.rank))
 
             # Flushes are stronger than straights and dry boards, so we check that first
             tones = BoardTexture.board_tone(in_play)
@@ -110,8 +115,12 @@ class Agent(Player):
                 return rank.rank > 5
             elif BoardTexture.board_connectivity(in_play):
                 return rank.rank > 4
+            elif len(in_play) < 4:
+                return rank.rank > 1
             else:
-                return rank.rank > 2 
+                return rank.rank > 2
+                
+                 
         else:
             # Handle special preflop state
             return True
@@ -150,3 +159,11 @@ class Agent(Player):
             if current_rank.rank > best_rank.rank:
                 best_rank = current_rank
         return best_rank
+    
+    def get_hands_played_freq(self):
+        return self.opponent_data["hands_played"] / self.opponent_data["total_hands"]
+    
+    def playing_hand(self, played):
+        if played:
+            self.opponent_data["hands_played"] += 1
+        self.opponent_data["total_hands"] += 1

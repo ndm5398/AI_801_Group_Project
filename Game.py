@@ -186,43 +186,47 @@ def perform_stage(first, second, pot, cards):
     bet = 0
     if (first.name == "AI"):
         while True:
+            previous_bet = bet
             bet = ai_response(first, second, previous_action, bet, pot, cards)
-            previous_action = determine_action(bet, previous_action)
+            previous_action = determine_action(bet, previous_action, previous_bet)
             if previous_action == "FOLD":
                 ai_folded = True
                 break
-            pot += handle_action(second, previous_action, bet)
+            pot += handle_action(first, previous_action, bet)
             if previous_action == "CALL":
                 break
 
-            bet = player_response(first, bet)
-            previous_action = determine_action(bet, previous_action)
+            previous_bet = bet
+            bet = player_response(second, bet)
+            previous_action = determine_action(bet, previous_action, previous_bet)
             if previous_action == "FOLD":
                 player_folded = True
                 break
-            pot += handle_action(first, previous_action, bet)
+            pot += handle_action(second, previous_action, bet)
             if previous_action == "CALL" or previous_action == "CHECK":
                 break
 
     else:
         while True:
             time.sleep(1)
-            bet = player_response(second, bet)
-            previous_action = determine_action(bet, previous_action)
+            previous_bet = bet
+            bet = player_response(first, bet)
+            previous_action = determine_action(bet, previous_action, previous_bet)
             if previous_action == "FOLD":
                 player_folded = True
                 break
-            pot += handle_action(second, previous_action, bet)
+            pot += handle_action(first, previous_action, bet)
             if previous_action == "CALL":
                 break
             
             # Have the AI determine what action it should take
+            previous_bet = bet
             bet = ai_response(second, first, previous_action, bet, pot, cards)
-            previous_action = determine_action(bet, previous_action)
+            previous_action = determine_action(bet, previous_action, previous_bet)
             if previous_action == "FOLD":
                 ai_folded = True
                 break
-            pot += handle_action(first, previous_action, bet)
+            pot += handle_action(second, previous_action, bet)
             if previous_action == "CALL" or previous_action == "CHECK":
                 break
     return [pot, player_folded, ai_folded]
@@ -243,31 +247,37 @@ def ai_response(ai, player, action, bet, pot, cards):
         print("\nThe AI folds. Player wins the pot.\n")
         time.sleep(1)
         return -1
-    elif ai_action == "CHECK":
+    elif ai_action == "RAISE":
+        time.sleep(1)
+        if action == "RAISE":
+            bet = 2 * bet
+            bet = bet if bet < ai.stack else ai.stack
+        else:
+            bet = math.ceil(pot/2)
+        print("\nThe AI raises {}".format(bet))
+        time.sleep(1)
+        return bet
+    elif ai_action == "CHECK" or bet == 0:
         time.sleep(1)
         print("\nThe AI checks.\n")
         time.sleep(1)
         return 0
-    elif ai_action == "RAISE":
+    elif ai_action == "CALL":
         time.sleep(1)
-        bet = math.ceil(pot/2)
-        print("\nThe AI raises {}".format(bet))
-        time.sleep(1)
-        return bet
-    else:
-        # Raising is not yet an option
-        time.sleep(1)
+        bet = bet if bet < ai.stack else ai.stack
         print("\nThe AI calls {0}.\n".format(bet))
         time.sleep(1)
         return bet
     
-def determine_action(bet, previous_action):
+def determine_action(bet, previous_action, previous_bet):
     if bet == 0:
         return "CHECK"
     elif bet == -1:
         return "FOLD"
     else:
         if previous_action == "RAISE":  # Need to add a condition to check if raise size was legal
+            if 2 * previous_bet <= bet:
+                return "RAISE"
             return "CALL"
         return "RAISE"
     
@@ -353,6 +363,12 @@ if __name__ == '__main__':
         pot = result[0]
         folded = check_for_fold(result)
         print("Total pot: {0}".format(pot))
+
+        # Handle exploitations
+        if p1.name == "AI":
+            p1.playing_hand(not result[1])
+        else:
+            p2.playing_hand(not result[1])
 
         # FLOP STAGE
         if (not folded):

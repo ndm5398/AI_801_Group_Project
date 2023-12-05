@@ -1,1 +1,1 @@
-{"Player": {"hand_played_frequency": 0.5}, "Mario": {"hand_played_frequency": 0.75}, "Nick": {"hand_played_frequency": 0.25}, "NewPlayer": {"hand_played_frequency": 0}}
+{"Player": {"hands_played": 91, "total_hands": 141}, "Mario": {"hands_played": 75, "total_hands": 100}, "Nick": {"hands_played": 25, "total_hands": 100}, "NewPlayer": {"hands_played": 0, "total_hands": 100}}
