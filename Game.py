@@ -148,15 +148,15 @@ def compare_player_hands(p1_best_rank, p2_best_rank):
         if winner == "tie":
             winner = compare(p1_best_rank.high_card.value, p2_best_rank.high_card.value)
     elif p1_best_rank.rank == 6: # flush
-        winner = compare(p1_best_rank.card_list[-1], p2_best_rank.card_list[-1])
+        winner = compare(p1_best_rank.card_list[-1].value, p2_best_rank.card_list[-1].value)
         if winner == "tie":
-            winner = compare(p1_best_rank.card_list[-2], p2_best_rank.card_list[-2])
+            winner = compare(p1_best_rank.card_list[-2].value, p2_best_rank.card_list[-2].value)
             if winner == "tie":
-                winner = compare(p1_best_rank.card_list[-3], p2_best_rank.card_list[-3])
+                winner = compare(p1_best_rank.card_list[-3].value, p2_best_rank.card_list[-3].value)
                 if winner == "tie":
-                    winner = compare(p1_best_rank.card_list[-4], p2_best_rank.card_list[-4])
+                    winner = compare(p1_best_rank.card_list[-4].value, p2_best_rank.card_list[-4].value)
                     if winner == "tie":
-                        winner = compare(p1_best_rank.card_list[-5], p2_best_rank.card_list[-5])
+                        winner = compare(p1_best_rank.card_list[-5].value, p2_best_rank.card_list[-5].value)
     elif p1_best_rank.rank == 7: # full house
         winner = compare(p1_best_rank.full_house["three_of_a_kind_value"], p2_best_rank.full_house["three_of_a_kind_value"])
         if winner == "tie":
