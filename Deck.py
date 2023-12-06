@@ -1,10 +1,9 @@
 import random, Card
 
 class Deck:
-    
-    in_deck = []
 
     def __init__(self):
+        self.in_deck = []
         self.construct()
         self.shuffle_deck()
     
