@@ -117,9 +117,9 @@ def rank_player_possible_hands(player, cards_in_play):
     return best_rank
 
 def compare(p1_value, p2_value):
-    if p1_value > p2_value:
+    if int(p1_value) > int(p2_value):
         return "p1"
-    elif p2_value > p1_value:
+    elif int(p2_value) > int(p1_value):
         return "p2"
     else:
         return "tie"
