@@ -144,7 +144,7 @@ def compare_player_hands(p1_best_rank, p2_best_rank):
         if winner == "tie":
             winner = compare(p1_best_rank.high_card.value, p2_best_rank.high_card.value)
     elif p1_best_rank.rank == 5: # straight
-        winner = compare(p1_best_rank.straight["high"], p2_best_rank.straight["high"])
+        winner = compare(p1_best_rank.straight["high"].value, p2_best_rank.straight["high"].value)
         if winner == "tie":
             winner = compare(p1_best_rank.high_card.value, p2_best_rank.high_card.value)
     elif p1_best_rank.rank == 6: # flush
