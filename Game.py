@@ -483,9 +483,9 @@ if __name__ == '__main__':
         time.sleep(1)
     
     if p1.stack > p2.stack:
-        print("---------------\nPlayer 1 wins!\n---------------")
+        print("---------------\n{0} wins!\n---------------".format(p1.name))
     else:
-        print("---------------\nPlayer 2 wins!\n---------------")
+        print("---------------\n{0} wins!\n---------------".format(p2.name))
 
     # Save player data
     player_1.save_player_data()
