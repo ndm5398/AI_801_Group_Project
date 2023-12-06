@@ -234,7 +234,7 @@ def perform_stage(first, second, pot, cards):
 
 
 def player_response(player, previous_bet):
-    bet = str(input("How much will you bet? [0 or Enter to check, -1 to fold]"))
+    bet = str(input("How much will you bet? [Enter to call, -1 to fold]"))
     if bet == "":
         bet = 0
     else:
