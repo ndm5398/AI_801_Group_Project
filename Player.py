@@ -1,13 +1,7 @@
-import random
-import Deck
-import Card
 import Hand
 
 
 class Player():
-
-    #isBigBlind = False
-    #isLittleBlind = Flase
 
     def __init__(self, name):
         self.name = name

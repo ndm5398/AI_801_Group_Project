@@ -4,7 +4,6 @@ from Rank import Rank
 from itertools import combinations
 import json
 import random
-import Hand
 
 class Agent(Player):
 

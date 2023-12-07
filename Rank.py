@@ -1,5 +1,3 @@
-import Card
-
 class Rank:
 
     def __init__(self, cards):

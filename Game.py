@@ -1,9 +1,6 @@
 import time
 import datetime
-import random
 import Deck
-import Card
-import Hand
 import Player
 import Agent
 from Rank import Rank
@@ -116,6 +113,8 @@ def rank_player_possible_hands(player, cards_in_play):
             # no royal flush tie possible
     return best_rank
 
+
+
 def compare(p1_value, p2_value):
     if int(p1_value) > int(p2_value):
         return "p1"
@@ -124,7 +123,8 @@ def compare(p1_value, p2_value):
     else:
         return "tie"
 
-# somewhat duplicate from hand ranking code, will optimize in the future
+
+
 def compare_player_hands(p1_best_rank, p2_best_rank):
     winner = ""
     if p1_best_rank.rank == 1: # high card
@@ -171,11 +171,13 @@ def compare_player_hands(p1_best_rank, p2_best_rank):
     return winner
 
 
+
 def get_card_list(card_objects_list):
     card_list = []
     for card in card_objects_list:
         card_list.append(card.get_card())
     return card_list
+
 
 
 def perform_stage(first, second, pot, cards):
@@ -244,6 +246,8 @@ def player_response(player, previous_bet):
     amount = bet if bet < player.stack else player.stack
     return amount
 
+
+
 def ai_response(ai, player, action, bet, pot, cards):
     ai_action = ai.determine_action(player, action, bet, pot, cards)
     if ai_action == "FOLD":
@@ -273,6 +277,8 @@ def ai_response(ai, player, action, bet, pot, cards):
         time.sleep(1)
         return bet
     
+
+
 def determine_action(bet, previous_action, previous_bet):
     if bet == 0:
         return "CHECK"
@@ -285,6 +291,8 @@ def determine_action(bet, previous_action, previous_bet):
             return "CALL"
         return "RAISE"
     
+
+
 def handle_action(player, action, bet):
     if action == "CALL" or action == "RAISE":
         player.bet(bet)
@@ -294,9 +302,13 @@ def handle_action(player, action, bet):
     else:
         return 0
     
+
+
 def check_for_fold(result):
     return result[1] or result[2]
     
+
+
 def print_stage():
     # Uncomment to hide AI hand
 
@@ -437,15 +449,11 @@ if __name__ == '__main__':
             p1_best_rank = rank_player_possible_hands(p1, in_play)
             print("---------------\n{2} Rank: {0}\nBest Hand: {1}".format(
                 p1_best_rank.get_rank(), p1_best_rank.description, p1.name))
-            #print("value_count: {0}".format(p1_best_rank.value_count))
-            #print("suit_count: {0}".format(p1_best_rank.suit_count))
             print(get_card_list(p1_best_rank.card_list))
 
             p2_best_rank = rank_player_possible_hands(p2, in_play)
             print("---------------\n{2} Rank: {0}\nBest Hand: {1}".format(
                 p2_best_rank.get_rank(), p2_best_rank.description, p2.name))
-            #print("value_count: {0}".format(p2_best_rank.value_count))
-            #print("suit_count: {0}".format(p2_best_rank.suit_count))
             print(get_card_list(p2_best_rank.card_list))
 
             if p1_best_rank.card_list == p2_best_rank.card_list:
